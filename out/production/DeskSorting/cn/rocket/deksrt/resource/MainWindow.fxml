@@ -7,13 +7,26 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.rocket.deksrt.controllers.MainWindow">
-    <Button layoutX="40.0" layoutY="25.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="导入..." />
-    <Button layoutX="180.0" layoutY="25.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="导出..." />
-    <Button layoutX="320.0" layoutY="25.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="随机排" />
-    <Button layoutX="460.0" layoutY="25.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="世龙排" />
-    <GridPane alignment="CENTER" gridLinesVisible="true" layoutX="40.0" layoutY="86.0" prefHeight="270.0" prefWidth="520.0">
+<AnchorPane prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.rocket.deksrt.main.MainWindow">
+    <Button fx:id="importB" layoutX="40.0" layoutY="25.0" mnemonicParsing="false" onAction="#impM" prefHeight="40.0" prefWidth="100.0" text="导入...">
+      <font>
+         <Font size="15.0" />
+      </font></Button>
+    <Button fx:id="exportB" layoutX="180.0" layoutY="25.0" mnemonicParsing="false" onAction="#expM" prefHeight="40.0" prefWidth="100.0" text="导出...">
+      <font>
+         <Font size="15.0" />
+      </font></Button>
+    <Button fx:id="radSort" layoutX="320.0" layoutY="25.0" mnemonicParsing="false" onAction="#radsM" prefHeight="40.0" prefWidth="100.0" text="随机排">
+      <font>
+         <Font size="15.0" />
+      </font></Button>
+    <Button fx:id="MSLSort" layoutX="460.0" layoutY="25.0" mnemonicParsing="false" onAction="#mslsM" prefHeight="40.0" prefWidth="100.0" text="世龙排">
+      <font>
+         <Font size="15.0" />
+      </font></Button>
+    <GridPane fx:id="grid0" alignment="CENTER" gridLinesVisible="true" layoutX="40.0" layoutY="85.0" prefHeight="270.0" prefWidth="520.0">
       <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -33,17 +46,22 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
-    <TextField layoutX="40.0" layoutY="418.0" prefHeight="59.0" prefWidth="520.0" />
-    <GridPane gridLinesVisible="true" layoutX="170.0" layoutY="356.0" prefHeight="45.0" prefWidth="260.0">
+    <TextField fx:id="headInfo" alignment="CENTER" layoutX="40.0" layoutY="425.0" prefHeight="45.0" prefWidth="520.0" promptText="输入班主任信息">
+      <font>
+         <Font size="15.0" />
+      </font></TextField>
+    <GridPane fx:id="grid1" gridLinesVisible="true" layoutX="170.0" layoutY="355.0" prefHeight="45.0" prefWidth="260.0">
         <columnConstraints>
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="88.0" minWidth="10.0" prefWidth="66.0"/>
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0"
-                               prefWidth="130.0"/>
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="91.0" minWidth="10.0" prefWidth="65.0"/>
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="88.0" minWidth="10.0" prefWidth="66.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0" prefWidth="130.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="91.0" minWidth="10.0" prefWidth="65.0" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
         </rowConstraints>
-        <Label text="讲台" GridPane.columnIndex="1"/>
+        <Label text="讲台" GridPane.columnIndex="1">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
     </GridPane>
 </AnchorPane>

@@ -2,12 +2,23 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="245.0" prefWidth="501.0" xmlns="http://javafx.com/javafx/8.0.171"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.rocket.deksrt.controllers.IOportDialog">
-   <Button layoutX="320.0" layoutY="199.0" mnemonicParsing="false" text="确定"/>
-   <Button layoutX="404.0" layoutY="199.0" mnemonicParsing="false" text="取消"/>
-   <Label layoutX="47.0" layoutY="62.0" text="从...导入:"/>
+<AnchorPane prefHeight="132.0" prefWidth="387.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.rocket.deksrt.main.IOportDialog">
+   <Button fx:id="iBtnOK" defaultButton="true" layoutX="237.0" layoutY="82.0" mnemonicParsing="false" prefHeight="32.0" text="确定">
+      <font>
+         <Font size="14.0" />
+      </font></Button>
+   <Button fx:id="iBtnCancel" cancelButton="true" layoutX="306.0" layoutY="82.0" mnemonicParsing="false" prefHeight="32.0" text="取消">
+      <font>
+         <Font size="14.0" />
+      </font></Button>
+   <Label fx:id="iLal" layoutX="25.0" layoutY="25.0" prefHeight="32.0" text="从...导入:">
+      <font>
+         <Font size="14.0" />
+      </font></Label>
+   <TextField fx:id="iodTxtF" layoutX="81.0" layoutY="25.0" prefHeight="32.0" prefWidth="251.0" />
+   <Button fx:id="iconBtn" layoutX="330.0" layoutY="25.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" />
 </AnchorPane>

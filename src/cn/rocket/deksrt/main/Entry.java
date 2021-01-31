@@ -11,15 +11,21 @@ import javafx.stage.Stage;
  * @version 1.0
  */
 public class Entry extends Application {
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/cn/rocket/deksrt/resource/MainWindow.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
-        primaryStage.show();
-    }
+	public static Stage currentStage;
+	 static Parent GRoot;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		currentStage = primaryStage;
+		Parent root = FXMLLoader.load(getClass().getResource("/cn/rocket/deksrt/resource/MainWindow.fxml"));
+		GRoot = root;
+		primaryStage.setTitle("排座位");
+		primaryStage.setScene(new Scene(root, 600,500));
+		primaryStage.show();
+
+	}
+
+	public static void main(String[] args) {
+		launch(args);
+	}
 }
