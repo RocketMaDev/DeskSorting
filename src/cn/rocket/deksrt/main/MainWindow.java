@@ -1,6 +1,5 @@
 package cn.rocket.deksrt.main;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -32,7 +31,7 @@ public class MainWindow {
 		}
 		iodS = new Stage();
 		iodS.setScene(new Scene(Objects.requireNonNull(iod)));
-
+		iodS.setAlwaysOnTop(true);
 	}
 
 	@FXML
@@ -45,6 +44,8 @@ public class MainWindow {
 	@FXML GridPane grid1;
 
 	@FXML void impM(ActionEvent actionEvent) {
+		if(iodS.isShowing())
+			return;
 		iodS.setTitle("导入");
 		Label il = (Label) iod.lookup("#iLal");
 		il.setText("从...导入:");
@@ -52,7 +53,12 @@ public class MainWindow {
 	}
 
 	@FXML void expM(ActionEvent actionEvent) {
-
+		if(iodS.isShowing())
+			return;
+		iodS.setTitle("导出");
+		Label il = (Label) iod.lookup("#iLal");
+		il.setText("导出至...:");
+		iodS.show();
 	}
 
 	@FXML void radsM(ActionEvent actionEvent) {
