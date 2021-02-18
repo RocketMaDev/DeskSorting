@@ -5,27 +5,93 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.apache.poi.ss.formula.functions.Column;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Properties;
 
 /**
  * @author Rocket
  * @version 1.0
  */
 public class Entry extends Application {
-	public static Stage currentStage;
-	 static Parent GRoot;
+    public static Stage currentStage;
+    static Parent GRoot;
+    private String[][] stuInfo;
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		currentStage = primaryStage;
-		Parent root = FXMLLoader.load(getClass().getResource("/cn/rocket/deksrt/resource/MainWindow.fxml"));
-		GRoot = root;
-		primaryStage.setTitle("排座位");
-		primaryStage.setScene(new Scene(root, 600,500));
-		primaryStage.show();
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        currentStage = primaryStage;
+        Parent root = FXMLLoader.load(getClass().getResource("/cn/rocket/deksrt/resource/MainWindow.fxml"));
+        GRoot = root;
+        primaryStage.setTitle("排座位");
+        primaryStage.setResizable(false);
+        primaryStage.setScene(new Scene(root, 600, 500));
+        primaryStage.show();
 
-	}
+    }
 
-	public static void main(String[] args) {
-		launch(args);
-	}
+    private void detectUserFile() throws IOException {
+        String _userProfile = System.getenv("USERPROFILE") + "/DeskSorting/env.properties";
+        File userProfile = new File(_userProfile);
+        if (!userProfile.exists()) {
+            String jarPath = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+            String globalPath = new File(jarPath).getParentFile().getPath();
+            InputStream in = this.getClass().getResourceAsStream("/cn/rocket/deksrt/resource/templateOfStuInfo.xlsx");
+            File out = new File(globalPath + "StuInfo.xlsx");
+            if (!out.exists()){
+                Files.copy(in, out.toPath());
+            }
+            else {
+                XSSFWorkbook wb = (XSSFWorkbook) WorkbookFactory.create(out);
+                ArrayList<String> names = new ArrayList<>();
+                ArrayList<String> pinyinList = new ArrayList<>();
+                ArrayList<Boolean> boarding = new ArrayList<>();
+                Sheet sheet = wb.getSheetAt(0);
+                DataFormatter df = new DataFormatter();
+                for (int row = 1; row <= 50; row++) {
+                    Row r = sheet.getRow(row);
+                    if (r == null)
+                        continue;
+
+                    Cell c0 = r.getCell(0, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+                    Cell c1 = r.getCell(1, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+                    Cell c2 = r.getCell(2, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+                    if(c0!=null){
+                        names.add(c0.getStringCellValue());
+                        pinyinList.add(c1!=null?c1.getStringCellValue():"");
+                        if(c2==null||!df.formatCellValue(c2).equals("1"))
+                            boarding.add(false);
+                        else
+                            boarding.add(true);
+                    }
+                }
+                System.out.println("name\tpy\tboarding");
+                for(int i=0;i<names.size();i++){
+                    System.out.print(names.get(i)+(names.get(i).length()==2?"\t\t":"\t"));
+                    System.out.print(pinyinList.get(i)+"\t");
+                    System.out.println(boarding.get(i).toString());
+                }
+            }
+
+            return;
+        }
+        FileInputStream fis = new FileInputStream(userProfile);
+        Properties p = new Properties();
+        p.load(fis);
+        String info = p.getProperty("stuinfo");
+    }
+
+    public static void main(String[] args) {
+//        try {
+//            new Entry().detectUserFile();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        launch(args);
+    }
 }

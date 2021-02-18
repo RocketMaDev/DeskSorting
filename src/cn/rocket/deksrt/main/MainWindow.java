@@ -1,5 +1,8 @@
 package cn.rocket.deksrt.main;
 
+import com.jfoenix.controls.JFXAutoCompletePopup;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,53 +22,83 @@ import java.util.Objects;
  * @version 1.0
  */
 public class MainWindow {
-	private Stage iodS;
-	private Parent iod;
+    static Stage iodS;
+    private Parent iod;
+    private Label[][] names;
 
-	@FXML void initialize(){
-		iod = null;
-		try {
-			iod = FXMLLoader.load(MainWindow.class.getResource("/cn/rocket/deksrt/resource/IOportDialog.fxml"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		iodS = new Stage();
-		iodS.setScene(new Scene(Objects.requireNonNull(iod)));
-		iodS.setAlwaysOnTop(true);
-	}
+    @FXML
+    JFXButton importB;
+    @FXML
+    JFXButton exportB;
+    @FXML
+    JFXButton radSort;
+    @FXML
+    JFXButton MSLSort;
+    @FXML
+    GridPane grid0;
+    @FXML
+    JFXTextField headInfo;
+    @FXML
+    GridPane grid1;
 
-	@FXML
-	Button importB;
-	@FXML Button exportB;
-	@FXML Button radSort;
-	@FXML Button MSLSort;
-	@FXML GridPane grid0;
-	@FXML TextField headInfo;
-	@FXML GridPane grid1;
+    @FXML
+    void initialize() {
+        iod = null;
+        try {
+            iod = FXMLLoader.load(MainWindow.class.getResource("/cn/rocket/deksrt/resource/IOportDialog.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        iodS = new Stage();
+        iodS.setResizable(false);
+        iodS.setScene(new Scene(Objects.requireNonNull(iod)));
+        iodS.setAlwaysOnTop(true);
 
-	@FXML void impM(ActionEvent actionEvent) {
-		if(iodS.isShowing())
-			return;
-		iodS.setTitle("导入");
-		Label il = (Label) iod.lookup("#iLal");
-		il.setText("从...导入:");
-		iodS.show();
-	}
+        grid0.getStylesheets().add(MainWindow.class.getResource("/cn/rocket/deksrt/resource/style.css").toExternalForm());
+        grid1.getStylesheets().add(MainWindow.class.getResource("/cn/rocket/deksrt/resource/style.css").toExternalForm());
+        names = new Label[8][7];
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 7; j++) {
+                names[i][j] = new Label("");
+//                names[i][j].setOnMousePressed(value -> {
+//
+//                });
+                if ((i == 2 || i == 5) && j == 6)
+                    grid1.add(names[i][j], i == 2 ? 0 : 2, 0);
+                else if(j!=6)
+                    grid0.add(names[i][j], i, j);
 
-	@FXML void expM(ActionEvent actionEvent) {
-		if(iodS.isShowing())
-			return;
-		iodS.setTitle("导出");
-		Label il = (Label) iod.lookup("#iLal");
-		il.setText("导出至...:");
-		iodS.show();
-	}
+            }
+    }
 
-	@FXML void radsM(ActionEvent actionEvent) {
+    @FXML
+    void impM(ActionEvent actionEvent) {
+        if (iodS.isShowing())
+            return;
+        iodS.setTitle("导入");
+        Label il = (Label) iod.lookup("#iLal");
+        il.setText("从...导入:");
+        iodS.show();
+    }
 
-	}
+    @FXML
+    void expM(ActionEvent actionEvent) {
+        if (iodS.isShowing())
+            return;
+        iodS.setTitle("导出");
+        Label il = (Label) iod.lookup("#iLal");
+        il.setText("导出至...:");
+        iodS.show();
+    }
 
-	@FXML void mslsM(ActionEvent actionEvent) {
+    @FXML
+    void radsM(ActionEvent actionEvent) {
 
-	}
+    }
+
+    @FXML
+    void mslsM(ActionEvent actionEvent) {
+        Label[][] shadow = new Label[10][7];
+//        System.arraycopy();
+    }
 }

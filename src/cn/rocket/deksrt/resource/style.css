@@ -1,0 +1,15 @@
+.jfx-button {
+     -jfx-button-type: RAISED;
+     -fx-background-color: dodgerblue;
+     -fx-text-fill: white;
+     -fx-font-size: 15;
+}
+
+.jfx-text-field {
+	-jfx-focus-color: dodgerblue;
+	-fx-font-size: 15;
+}
+
+.label {
+	-fx-font-size: 15;
+}
