@@ -1,6 +1,5 @@
 package cn.rocket.deksrt.main;
 
-import com.jfoenix.controls.JFXAutoCompletePopup;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
@@ -8,9 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -99,6 +96,19 @@ public class MainWindow {
     @FXML
     void mslsM(ActionEvent actionEvent) {
         Label[][] shadow = new Label[10][7];
-//        System.arraycopy();
+        for (int i = 1; i < 3; i++)
+            for (int j = 0; j < 8; j++)
+                shadow[j+2][i-1] = names[j][i];
+        for (int j = 0; j < 8; j++)
+            shadow[j+2][2] = names[j][0];
+
+        for (int i = 3; i < 6; i++)
+            for (int j = 0; j < 8; j++)
+                shadow[j+2][i-1] = names[j][i];
+        for (int j = 0; j < 8; j++)
+            shadow[j+2][5] = names[j][3];
+
+
+        
     }
 }
