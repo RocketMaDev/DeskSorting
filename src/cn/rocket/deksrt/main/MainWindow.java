@@ -21,7 +21,7 @@ import java.util.Objects;
 public class MainWindow {
     static Stage iodS;
     private Parent iod;
-    private Label[][] names;
+    private Student[][] students;
 
     @FXML
     JFXButton importB;
@@ -53,19 +53,19 @@ public class MainWindow {
 
         grid0.getStylesheets().add(MainWindow.class.getResource("/cn/rocket/deksrt/resource/style.css").toExternalForm());
         grid1.getStylesheets().add(MainWindow.class.getResource("/cn/rocket/deksrt/resource/style.css").toExternalForm());
-        names = new Label[8][7];
-        for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 7; j++) {
-                names[i][j] = new Label("");
-//                names[i][j].setOnMousePressed(value -> {
+        students = new Student[8][7];
+//        for (int i = 0; i < 8; i++)
+//            for (int j = 0; j < 7; j++) {
+//                students[i][j] = new Label("");
+////                names[i][j].setOnMousePressed(value -> {
+////
+////                });
+//                if ((i == 2 || i == 5) && j == 6)
+//                    grid1.add(students[i][j], i == 2 ? 0 : 2, 0);
+//                else if(j!=6)
+//                    grid0.add(students[i][j], i, j);
 //
-//                });
-                if ((i == 2 || i == 5) && j == 6)
-                    grid1.add(names[i][j], i == 2 ? 0 : 2, 0);
-                else if(j!=6)
-                    grid0.add(names[i][j], i, j);
-
-            }
+//            }
     }
 
     @FXML
@@ -95,20 +95,24 @@ public class MainWindow {
 
     @FXML
     void mslsM(ActionEvent actionEvent) {
-        Label[][] shadow = new Label[10][7];
+        Student[][] shadow = new Student[10][7];
         for (int i = 1; i < 3; i++)
             for (int j = 0; j < 8; j++)
-                shadow[j+2][i-1] = names[j][i];
+                shadow[j + 2][i - 1] = students[j][i];
         for (int j = 0; j < 8; j++)
-            shadow[j+2][2] = names[j][0];
+            shadow[j + 2][2] = students[j][0];
 
         for (int i = 3; i < 6; i++)
             for (int j = 0; j < 8; j++)
-                shadow[j+2][i-1] = names[j][i];
+                shadow[j + 2][i - 1] = students[j][i];
         for (int j = 0; j < 8; j++)
-            shadow[j+2][5] = names[j][3];
+            shadow[j + 2][5] = students[j][3];
+
+        shadow[2][6] = students[6][6];
+        shadow[1][6] = students[5][6];
+        shadow[5][6] = students[1][6];
+        shadow[6][6] = students[2][6];
 
 
-        
     }
 }

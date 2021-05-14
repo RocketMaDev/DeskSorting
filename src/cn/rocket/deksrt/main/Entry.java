@@ -21,7 +21,7 @@ import java.util.Properties;
 public class Entry extends Application {
     public static Stage currentStage;
     static Parent GRoot;
-    private String[][] stuInfo;
+    private Student[] stuInfo;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -43,10 +43,9 @@ public class Entry extends Application {
             String globalPath = new File(jarPath).getParentFile().getPath();
             InputStream in = this.getClass().getResourceAsStream("/cn/rocket/deksrt/resource/templateOfStuInfo.xlsx");
             File out = new File(globalPath + "StuInfo.xlsx");
-            if (!out.exists()){
+            if (!out.exists()) {
                 Files.copy(in, out.toPath());
-            }
-            else {
+            } else {
                 XSSFWorkbook wb = (XSSFWorkbook) WorkbookFactory.create(out);
                 ArrayList<String> names = new ArrayList<>();
                 ArrayList<String> pinyinList = new ArrayList<>();
@@ -61,19 +60,22 @@ public class Entry extends Application {
                     Cell c0 = r.getCell(0, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
                     Cell c1 = r.getCell(1, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
                     Cell c2 = r.getCell(2, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
-                    if(c0!=null){
+                    if (c0 != null) {
                         names.add(c0.getStringCellValue());
-                        pinyinList.add(c1!=null?c1.getStringCellValue():"");
-                        if(c2==null||!df.formatCellValue(c2).equals("1"))
+                        pinyinList.add(c1 != null ? c1.getStringCellValue() : "");
+                        if (c2 == null || !df.formatCellValue(c2).equals("1"))
                             boarding.add(false);
                         else
                             boarding.add(true);
                     }
                 }
+                stuInfo = new Student[names.size()];
+                for (int i = 0; i < stuInfo.length; i++)
+                    stuInfo[i] = new Student(names.get(i), pinyinList.get(i), boarding.get(i));
                 System.out.println("name\tpy\tboarding");
-                for(int i=0;i<names.size();i++){
-                    System.out.print(names.get(i)+(names.get(i).length()==2?"\t\t":"\t"));
-                    System.out.print(pinyinList.get(i)+"\t");
+                for (int i = 0; i < names.size(); i++) {
+                    System.out.print(names.get(i) + (names.get(i).length() == 2 ? "\t\t" : "\t"));
+                    System.out.print(pinyinList.get(i) + "\t");
                     System.out.println(boarding.get(i).toString());
                 }
             }
