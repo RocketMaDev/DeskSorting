@@ -5,11 +5,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.apache.poi.ss.formula.functions.Column;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -19,18 +21,14 @@ import java.util.Properties;
  * @version 1.0
  */
 public class Entry extends Application {
-    public static Stage currentStage;
-    static Parent GRoot;
     private Student[] stuInfo;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        currentStage = primaryStage;
         Parent root = FXMLLoader.load(getClass().getResource("/cn/rocket/deksrt/resource/MainWindow.fxml"));
-        GRoot = root;
         primaryStage.setTitle("排座位");
         primaryStage.setResizable(false);
-        primaryStage.setScene(new Scene(root, 600, 500));
+        primaryStage.setScene(new Scene(root, 720, 500));
         primaryStage.show();
 
     }
@@ -40,7 +38,7 @@ public class Entry extends Application {
         File userProfile = new File(_userProfile);
         if (!userProfile.exists()) {
             String jarPath = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
-            String globalPath = new File(jarPath).getParentFile().getPath();
+            String globalPath = new File(jarPath).getParentFile().getPath();  //jar file parent path
             InputStream in = this.getClass().getResourceAsStream("/cn/rocket/deksrt/resource/templateOfStuInfo.xlsx");
             File out = new File(globalPath + "StuInfo.xlsx");
             if (!out.exists()) {
