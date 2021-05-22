@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.net.URL;
 
 public class IEportDialog {
@@ -23,8 +24,10 @@ public class IEportDialog {
     @FXML
     JFXButton iBtnOK;
 
+
     @FXML
     void initialize() {
+        iodTxtF.setText("");
         URL iconU = IEportDialog.class.getResource("/cn/rocket/deksrt/resource/folder.png");
         iconBtn.setText("");
         iconBtn.setGraphic(new ImageView(String.valueOf(iconU)));
@@ -32,6 +35,9 @@ public class IEportDialog {
 
     @FXML
     void okM(ActionEvent actionEvent) {
+        String address = iodTxtF.getText();
+        if (address.lastIndexOf(".xlsx") == address.length() - ".xlsx".length() && !new File(address).exists())
+            return;
 
     }
 
@@ -48,8 +54,14 @@ public class IEportDialog {
         FileChooser fc = new FileChooser();
         fc.setTitle("选择您的座位表文件：");
         fc.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("New Excel File", "*.xlsx"),
-                new FileChooser.ExtensionFilter("Legacy Excel File", "*.xls")
+                new FileChooser.ExtensionFilter("New Excel File", "*.xlsx")
         );
+        File selected;
+        if (MainWindow.iodS.getTitle().equals("导入"))
+            selected = fc.showOpenDialog(MainWindow.iodS);
+        else
+            selected = fc.showSaveDialog(MainWindow.iodS);
+        isFileChooserCreated = false;
+        iodTxtF.setText(selected != null ? selected.getAbsolutePath() : "");
     }
 }

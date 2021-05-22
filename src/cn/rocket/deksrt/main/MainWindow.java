@@ -75,6 +75,8 @@ public class MainWindow {
         iodS.setTitle("导入");
         Label il = (Label) iod.lookup("#iLal");
         il.setText("从...导入:");
+        JFXTextField jtf = (JFXTextField) iod.lookup("#iodTxtF");
+        jtf.setText("");
         iodS.show();
     }
 
@@ -85,6 +87,8 @@ public class MainWindow {
         iodS.setTitle("导出");
         Label il = (Label) iod.lookup("#iLal");
         il.setText("导出至...:");
+        JFXTextField jtf = (JFXTextField) iod.lookup("#iodTxtF");
+        jtf.setText("");
         iodS.show();
     }
 
