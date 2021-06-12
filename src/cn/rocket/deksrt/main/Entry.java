@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -25,7 +26,9 @@ public class Entry extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/cn/rocket/deksrt/resource/MainWindow.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(
+                getClass().getResource("/cn/rocket/deksrt/resource/MainWindow.fxml")
+        ));
         primaryStage.setTitle("排座位");
         primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(root, 720, 500));
@@ -42,6 +45,7 @@ public class Entry extends Application {
             InputStream in = this.getClass().getResourceAsStream("/cn/rocket/deksrt/resource/templateOfStuInfo.xlsx");
             File out = new File(globalPath + "StuInfo.xlsx");
             if (!out.exists()) {
+                assert in != null;
                 Files.copy(in, out.toPath());
             } else {
                 XSSFWorkbook wb = (XSSFWorkbook) WorkbookFactory.create(out);

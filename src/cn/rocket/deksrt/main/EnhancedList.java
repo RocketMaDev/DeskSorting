@@ -36,6 +36,7 @@ public class EnhancedList<E> extends ArrayList<E> {
         hasSearched = null;
     }
 
+    @SuppressWarnings("unchecked")
     public E searchByName(String name) throws IllegalAccessException {
         if (!searching)
             throw new IllegalAccessException("You need to invoke startSearching() first");

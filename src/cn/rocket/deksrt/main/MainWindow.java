@@ -45,7 +45,9 @@ public class MainWindow {
     void initialize() throws IllegalAccessException {
         iod = null;
         try {
-            iod = FXMLLoader.load(MainWindow.class.getResource("/cn/rocket/deksrt/resource/IOportDialog.fxml"));
+            iod = FXMLLoader.load(Objects.requireNonNull(
+                    MainWindow.class.getResource("/cn/rocket/deksrt/resource/IOportDialog.fxml")
+            ));
         } catch (IOException e) {
             e.printStackTrace();
         }

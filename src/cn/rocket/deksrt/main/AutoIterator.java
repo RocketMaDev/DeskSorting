@@ -74,11 +74,3 @@ public class AutoIterator {
         return content;
     }
 }
-
-class Test {
-    public static void main(String[] args) throws IllegalAccessException {
-        for (AutoIterator i = new AutoIterator(AutoIterator.SQUARE_ARRAY); i.hasNextWithUpdate(); i.next()) {
-            System.out.println(i.x + "," + i.y);
-        }
-    }
-}
