@@ -1,8 +1,13 @@
 package cn.rocket.deksrt.main;
 
+import cn.rocket.deksrt.util.AutoIterator;
+import cn.rocket.deksrt.util.Student;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +17,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Objects;
 
 /**
@@ -25,7 +33,10 @@ public class MainWindow {
     private JFXButton[][] btns;
     private JFXTextField[][] textfields;
     private Student[][] students;
+    private int index;
 
+    @FXML
+    JFXCheckBox quickSwapCB;
     @FXML
     JFXButton importB;
     @FXML
@@ -40,6 +51,38 @@ public class MainWindow {
     JFXTextField headInfo;
     @FXML
     GridPane grid1;
+
+
+    private class ButtonEventHandler implements EventHandler {
+
+        private final int x;
+        private final int y;
+
+        public ButtonEventHandler(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        @Override
+        public void handle(Event event) {
+            if (quickSwapCB.isSelected())
+                if (index == -1) {
+                    index = x * 10 + y;
+                    btns[y][x].setDisable(true);
+                } else {
+                    int x0 = index / 10;
+                    int y0 = index % 10;
+                    index = -1;
+                    Student t = students[y0][x0];
+                    students[y0][x0] = students[y][x];
+                    students[y][x] = t;
+                    updateTable(x0, y0);
+                    updateTable(x, y);
+                }
+            else
+                return;
+        }
+    }
 
     @FXML
     void initialize() throws IllegalAccessException {
@@ -56,8 +99,6 @@ public class MainWindow {
         iodS.setScene(new Scene(Objects.requireNonNull(iod)));
         iodS.setAlwaysOnTop(true);
 
-//        grid0.getStylesheets().add(MainWindow.class.getResource("/cn/rocket/deksrt/resource/style.css").toExternalForm());
-//        grid1.getStylesheets().add(MainWindow.class.getResource("/cn/rocket/deksrt/resource/style.css").toExternalForm());
         students = new Student[7][8];
         btns = new JFXButton[7][8];
         textfields = new JFXTextField[7][8];
@@ -65,25 +106,16 @@ public class MainWindow {
         for (AutoIterator i = new AutoIterator(AutoIterator.SQUARE_ARRAY); i.hasNextWithUpdate(); i.next()) {
             btns[i.y][i.x] = new JFXButton();
             btns[i.y][i.x].setPrefSize(80, 45);
+            btns[i.y][i.x].setOnAction(new ButtonEventHandler(i.x, i.y));
 
             textfields[i.y][i.x] = new JFXTextField();
             textfields[i.y][i.x].setVisible(false);
             textfields[i.y][i.x].setDisable(true);
         }
-
-//        for (int y = 0; y < 6; y++)
-//            for (int x = 0; x < 8; x++) {
-//                grid0.add(btns[y][x], x, y);
-//                grid0.add(textfields[y][x], x, y);
-//            }
         for (AutoIterator i = new AutoIterator(AutoIterator.GRID0); i.hasNextWithUpdate(); i.next()) {
             grid0.add(btns[i.y][i.x], i.x, i.y);
             grid0.add(textfields[i.y][i.x], i.x, i.y);
         }
-//        for (int i : SEAT_MAP) {
-//            grid1.add(btns[6][i], i, 0);
-//            grid1.add(textfields[6][i], i, 0);
-//        }
         for (AutoIterator i = new AutoIterator(AutoIterator.GRID1); i.hasNextWithUpdate(); i.next()) {
             int col = i.x < 3 ? i.x + 1 : i.x + 2;
             grid1.add(btns[6][col], i.x, i.y);
@@ -118,6 +150,23 @@ public class MainWindow {
 
     @FXML
     void randM(ActionEvent actionEvent) {
+        LinkedList<Student> stus = new LinkedList<>(GlobalVariables.stuInfo);
+        int[] t0 = new AutoIterator(AutoIterator.SQUARE_ARRAY).toArray();
+        Integer[] t1 = new Integer[t0.length];
+        for (int i = 0; i < t0.length; i++)
+            t1[i] = t0[i];
+        LinkedList<Integer> seats = new LinkedList<>(Arrays.asList(t1));
+        students = new Student[7][8];
+        int length = stus.size();
+        for (int i = 0; i < length; i++) {
+            int pstu = (int) (Math.random() * (length - i));
+            int pseat = (int) (Math.random() * seats.size());
+            int xy = seats.get(pseat);
+            students[xy % 10][xy / 10] = stus.get(pstu);
+            stus.remove(pstu);
+            seats.remove(pseat);
+        }
+        updateTable();
     }
 
     @FXML
@@ -127,7 +176,7 @@ public class MainWindow {
             System.arraycopy(students[i], 0, shadow[i - 1], 2, 8);
         System.arraycopy(students[0], 0, shadow[2], 2, 8);
 
-        for (int i = 3; i < 6; i++)
+        for (int i = 4; i < 6; i++)
             System.arraycopy(students[i], 0, shadow[i - 1], 2, 8);
         System.arraycopy(students[3], 0, shadow[5], 2, 8);
 
@@ -137,19 +186,31 @@ public class MainWindow {
         shadow[6][6] = students[6][2];
 
         for (int y = 0; y < 6; y++) {
-            System.arraycopy(shadow[y],2,students[y],2,6);
-            System.arraycopy(shadow[y],8,students[y],0,2);
+            System.arraycopy(shadow[y], 2, students[y], 2, 6);
+            System.arraycopy(shadow[y], 8, students[y], 0, 2);
         }
-        System.arraycopy(shadow[6],1,students[6],1,6);
+        System.arraycopy(shadow[6], 1, students[6], 1, 6);
         updateTable();
     }
 
+    void importTable(File tableFile) {
+
+    }
+
+    void exportTable(String exportPath) {
+
+    }
+
     private void updateTable(int x, int y) {
-        if (students[y][x] == null)
-            return;
         JFXButton btn = btns[y][x];
-        btn.setText(students[y][x].getName());
-        btn.setTextFill(students[y][x].isBoarding()?Paint.valueOf("BLUE"):Paint.valueOf("GREEN"));
+        if (students[y][x] == null) {
+            btn.setText("");
+        } else {
+            btn.setText(students[y][x].getName());
+            btn.setTextFill(students[y][x].isBoarding() ? Paint.valueOf("BLUE") : Paint.valueOf("GREEN"));
+        }
+        if (btn.isDisable())
+            btn.setDisable(false);
         if (!btn.isVisible())
             btn.setVisible(true);
         if (textfields[y][x].isVisible())
@@ -159,9 +220,15 @@ public class MainWindow {
     private void updateTable() {
         try {
             for (AutoIterator i = new AutoIterator(AutoIterator.SQUARE_ARRAY); i.hasNextWithUpdate(); i.next())
-                updateTable(i.x,i.y);
+                updateTable(i.x, i.y);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    void quickSwapM(ActionEvent actionEvent) {
+        index = -1;
+        updateTable();
     }
 }

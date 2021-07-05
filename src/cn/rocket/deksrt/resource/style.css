@@ -10,6 +10,11 @@
 	-fx-font-size: 15;
 }
 
+.jfx-check-box {
+    -jfx-checked-color: dodgerblue;
+    -fx-font-size: 15;
+}
+
 .label {
 	-fx-font-size: 15;
 }

@@ -19,6 +19,7 @@
       <root url="jar://$PROJECT_DIR$/poi-src-5.0.0-20210120.zip!/poi-5.0.0/src/scratchpad/src" />
       <root url="jar://$PROJECT_DIR$/poi-src-5.0.0-20210120.zip!/poi-5.0.0/src/scratchpad/testcases" />
       <root url="jar://$PROJECT_DIR$/poi-src-5.0.0-20210120.zip!/poi-5.0.0/src/testcases" />
+      <root url="jar://$USER_HOME$/.ideaLibSources/poi-5.0.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

@@ -1,23 +1,23 @@
-package cn.rocket.deksrt.main;
+package cn.rocket.deksrt.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class EnhancedList<E> extends ArrayList<E> {
+public class StudentList<E> extends ArrayList<E> {
     private boolean searching;
     private boolean[] hasSearched;
 
-    public EnhancedList(int initialCapacity) {
+    public StudentList(int initialCapacity) {
         super(initialCapacity);
         searching = false;
     }
 
-    public EnhancedList() {
+    public StudentList() {
         super();
         searching = false;
     }
 
-    public EnhancedList(Collection<? extends E> c) {
+    public StudentList(Collection<? extends E> c) {
         super(c);
         searching = false;
     }

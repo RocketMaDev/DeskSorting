@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -46,22 +47,22 @@
             <Font size="15.0" />
          </font></Label>
     </GridPane>
-   <JFXButton fx:id="importB" buttonType="RAISED" layoutX="40.0" layoutY="25.0" onAction="#impM" prefHeight="40.0" prefWidth="100.0" ripplerFill="BLACK" stylesheets="@style.css" text="导入...">
+   <JFXButton fx:id="importB" buttonType="RAISED" layoutX="40.0" layoutY="25.0" onAction="#impM" prefHeight="40.0" prefWidth="100.0" ripplerFill="BLACK" stylesheets="@style.css" text="导入..." AnchorPane.leftAnchor="40.0">
       <font>
          <Font size="15.0" />
       </font>
    </JFXButton>
-   <JFXButton fx:id="exportB" buttonType="RAISED" layoutX="220.0" layoutY="25.0" onAction="#expM" prefHeight="40.0" prefWidth="100.0" ripplerFill="BLACK" stylesheets="@style.css" text="导出...">
+   <JFXButton fx:id="exportB" buttonType="RAISED" layoutX="173.0" layoutY="25.0" onAction="#expM" prefHeight="40.0" prefWidth="100.0" ripplerFill="BLACK" stylesheets="@style.css" text="导出..." AnchorPane.leftAnchor="173.0" AnchorPane.topAnchor="25.0">
       <font>
          <Font size="15.0" />
       </font>
    </JFXButton>
-   <JFXButton fx:id="radSort" buttonType="RAISED" layoutX="400.0" layoutY="25.0" onAction="#radsM" prefHeight="40.0" prefWidth="100.0" ripplerFill="BLACK" stylesheets="@style.css" text="随机排">
+   <JFXButton fx:id="randSort" buttonType="RAISED" layoutX="436.0" layoutY="25.0" onAction="#randM" prefHeight="40.0" prefWidth="100.0" ripplerFill="BLACK" stylesheets="@style.css" text="随机排">
       <font>
          <Font size="15.0" />
       </font>
    </JFXButton>
-   <JFXButton fx:id="MSLSort" buttonType="RAISED" layoutX="580.0" layoutY="25.0" onAction="#mslsM" prefHeight="40.0" prefWidth="100.0" ripplerFill="BLACK" stylesheets="@style.css" text="随机排">
+   <JFXButton fx:id="MSLSort" buttonType="RAISED" layoutX="580.0" layoutY="25.0" onAction="#mslM" prefHeight="40.0" prefWidth="100.0" ripplerFill="BLACK" stylesheets="@style.css" text="世龙排">
       <font>
          <Font size="15.0" />
       </font>
@@ -71,4 +72,9 @@
          <Font size="15.0" />
       </font>
    </JFXTextField>
+   <JFXCheckBox fx:id="quickSwapCB" layoutX="310.0" layoutY="25.0" onAction="#quickSwapM" prefHeight="40.0" prefWidth="100.0" stylesheets="@style.css" text="快速交换">
+      <font>
+         <Font size="15.0" />
+      </font>
+   </JFXCheckBox>
 </AnchorPane>

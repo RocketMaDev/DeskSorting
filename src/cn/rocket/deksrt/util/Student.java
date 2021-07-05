@@ -1,4 +1,4 @@
-package cn.rocket.deksrt.main;
+package cn.rocket.deksrt.util;
 
 public class Student {
     private final String name;
@@ -12,7 +12,7 @@ public class Student {
             stu = (Student) obj;
         else
             return false;
-        return name.equals(stu.name) && pinyin.equals(stu.pinyin) && boarding == stu.boarding;
+        return name.equals(stu.name);
     }
 
     @Override
