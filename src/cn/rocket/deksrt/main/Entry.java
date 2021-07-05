@@ -124,7 +124,7 @@ public class Entry extends Application {
             sb.append(student.getName()).append("$").append(student.getPinyin()).append("$")
                     .append(Boolean.valueOf(student.isBoarding())).append(",");
         }
-        sb.replace(sb.length() - 1, sb.length() - 1, ";");
+        sb.deleteCharAt(sb.length() - 1).append(';');
         sb.deleteCharAt(sb.length() - 1);
         try (OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(infoFile), StandardCharsets.UTF_8)) {
             osw.write(sb.toString());

@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -34,6 +35,8 @@ public class MainWindow {
     private JFXTextField[][] textfields;
     private Student[][] students;
     private int index;
+    private static final Font size15 = new Font(15);
+    private static final Font size12 = new Font(12);
 
     @FXML
     JFXCheckBox quickSwapCB;
@@ -104,13 +107,17 @@ public class MainWindow {
         textfields = new JFXTextField[7][8];
 
         for (AutoIterator i = new AutoIterator(AutoIterator.SQUARE_ARRAY); i.hasNextWithUpdate(); i.next()) {
-            btns[i.y][i.x] = new JFXButton();
-            btns[i.y][i.x].setPrefSize(80, 45);
-            btns[i.y][i.x].setOnAction(new ButtonEventHandler(i.x, i.y));
+            JFXButton btn = new JFXButton();
+            btns[i.y][i.x] = btn;
+            btn.setPrefSize(80, 45);
+            btn.setOnAction(new ButtonEventHandler(i.x, i.y));
+            btn.setFont(size15);
 
-            textfields[i.y][i.x] = new JFXTextField();
-            textfields[i.y][i.x].setVisible(false);
-            textfields[i.y][i.x].setDisable(true);
+            JFXTextField textField = new JFXTextField();
+            textfields[i.y][i.x] = textField;
+            textField.setFont(size15);
+            textField.setVisible(false);
+            textField.setDisable(true);
         }
         for (AutoIterator i = new AutoIterator(AutoIterator.GRID0); i.hasNextWithUpdate(); i.next()) {
             grid0.add(btns[i.y][i.x], i.x, i.y);
@@ -207,6 +214,10 @@ public class MainWindow {
             btn.setText("");
         } else {
             btn.setText(students[y][x].getName());
+            if (btn.getText().length()>4)
+                btn.setFont(size12);
+            else
+                btn.setFont(size15);
             btn.setTextFill(students[y][x].isBoarding() ? Paint.valueOf("BLUE") : Paint.valueOf("GREEN"));
         }
         if (btn.isDisable())

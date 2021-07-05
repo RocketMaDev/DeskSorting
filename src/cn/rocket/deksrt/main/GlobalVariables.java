@@ -1,7 +1,7 @@
 package cn.rocket.deksrt.main;
 
-import cn.rocket.deksrt.util.StudentList;
 import cn.rocket.deksrt.util.Student;
+import cn.rocket.deksrt.util.StudentList;
 
 /**
  * @author Rocket
