@@ -7,7 +7,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -38,10 +41,12 @@ public class Entry extends Application {
     }
 
     /**
+     * <b>EXIT CODE 99, 100 HERE</b>
+     *
      * @return errors in xlsx file
      * @throws IOException if input a incorrect file
      */
-    private String scanStuInfo() throws IOException {
+    private String scanStuInfo() throws IOException, InvalidFormatException {
         StringBuilder errors = new StringBuilder();
         InputStream in = this.getClass().getResourceAsStream(GlobalVariables.stuInfoTemplateP);
         File infoXlsx = new File(GlobalVariables.jarParentPath + "StuInfo.xlsx");
@@ -50,7 +55,8 @@ public class Entry extends Application {
             Files.copy(in, infoXlsx.toPath());
             System.exit(99);
         } else {
-            Workbook wb = WorkbookFactory.create(infoXlsx);
+            OPCPackage opcPackage = OPCPackage.open(infoXlsx);
+            XSSFWorkbook wb = new XSSFWorkbook(opcPackage);
             GlobalVariables.stuInfo = new StudentList<>(52);
             StudentList<Student> stuIn = GlobalVariables.stuInfo;
 
@@ -94,6 +100,10 @@ public class Entry extends Application {
                 queue = new Student(name, pinyin.toLowerCase(), boarding);
                 if (!stuIn.contains(queue))
                     stuIn.add(new Student(name, pinyin.toLowerCase(), boarding));
+            }
+            if (stuIn.size() == 0) {
+                System.err.println("No names in input file!");
+                System.exit(100);
             }
             System.out.println("name\tpy\tboarding");
             for (Student student : stuIn)

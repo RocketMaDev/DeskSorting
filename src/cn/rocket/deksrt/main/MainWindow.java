@@ -92,7 +92,7 @@ public class MainWindow {
         iod = null;
         try {
             iod = FXMLLoader.load(Objects.requireNonNull(
-                    MainWindow.class.getResource("/cn/rocket/deksrt/resource/IOportDialog.fxml")
+                    MainWindow.class.getResource("/cn/rocket/deksrt/resource/IEportDialog.fxml")
             ));
         } catch (IOException e) {
             e.printStackTrace();
