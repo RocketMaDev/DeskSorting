@@ -31,7 +31,7 @@ public class Entry extends Application {
         exportStuInfo();
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(
-                getClass().getResource("/cn/rocket/deksrt/resource/MainWindow.fxml")
+                getClass().getResource(GlobalVariables.MAIN_WINDOW_FXML)
         ));
         primaryStage.setTitle("排座位");
         primaryStage.setResizable(false);
@@ -48,7 +48,7 @@ public class Entry extends Application {
      */
     private String scanStuInfo() throws IOException, InvalidFormatException {
         StringBuilder errors = new StringBuilder();
-        InputStream in = this.getClass().getResourceAsStream(GlobalVariables.stuInfoTemplateP);
+        InputStream in = this.getClass().getResourceAsStream(GlobalVariables.STU_INFO_TEMPLATE_P);
         File infoXlsx = new File(GlobalVariables.jarParentPath + "StuInfo.xlsx");
         if (!infoXlsx.exists()) {
             assert in != null;
@@ -115,11 +115,11 @@ public class Entry extends Application {
     }
 
     private void exportStuInfo() {
-        File parent = new File(GlobalVariables.env);
+        File parent = new File(GlobalVariables.ENV);
         if (!parent.exists())
             //noinspection ResultOfMethodCallIgnored
             parent.mkdirs();
-        File infoFile = new File(GlobalVariables.env + "student.info");
+        File infoFile = new File(GlobalVariables.STUDENT_INFO);
         if (!infoFile.exists())
             try {
                 //noinspection ResultOfMethodCallIgnored
@@ -148,7 +148,7 @@ public class Entry extends Application {
      * @return <code>false</code> if no info in "student.info" or the file doesn't exist.
      */
     private boolean importStuInfo() {
-        File infoFile = new File(GlobalVariables.env + "student.info");
+        File infoFile = new File(GlobalVariables.STUDENT_INFO);
         String info = null;
         if (!infoFile.exists())
             return false;
@@ -177,9 +177,23 @@ public class Entry extends Application {
         return true;
     }
 
+    /**
+     * The main entrance of the program.
+     *
+     * @param args [0]:--reset?delete student.info
+     */
     public static void main(String[] args) {
         GlobalVariables.jarPath = Entry.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         GlobalVariables.jarParentPath = new File(GlobalVariables.jarPath).getParent() + "/";
+
+        // 重置 参数
+        if (args.length != 0 && args[0].equals("--reset")) {
+            File stuInfoFile = new File(GlobalVariables.STUDENT_INFO);
+            if (stuInfoFile.exists())
+                //noinspection ResultOfMethodCallIgnored
+                stuInfoFile.delete();
+        }
+
 
         launch(args);
     }

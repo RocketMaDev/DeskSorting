@@ -17,6 +17,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.IOException;
@@ -200,7 +205,17 @@ public class MainWindow {
         updateTable();
     }
 
-    void importTable(File tableFile) {
+    void importTable(File tableFile) throws IllegalAccessException {
+        GlobalVariables.stuInfo.startSearching();
+        DataFormatter formatter = new DataFormatter();
+        XSSFWorkbook ctWorkbook = null;
+        try {
+            OPCPackage opcPackage = OPCPackage.open(tableFile);
+            ctWorkbook = new XSSFWorkbook(opcPackage);
+        } catch (InvalidFormatException | IOException e) {
+            e.printStackTrace();
+        }
+        XSSFSheet table = Objects.requireNonNull(ctWorkbook).getSheetAt(0);
 
     }
 
