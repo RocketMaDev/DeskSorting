@@ -2,17 +2,17 @@
      -jfx-button-type: RAISED;
      -fx-background-color: dodgerblue;
      -fx-text-fill: white;
-     -fx-font-size: 15;
+     -fx-font-size: 22;
 }
 
 .jfx-text-field {
 	-jfx-focus-color: dodgerblue;
-	-fx-font-size: 15;
+	-fx-font-size: 21;
 }
 
 .jfx-check-box {
     -jfx-checked-color: dodgerblue;
-    -fx-font-size: 15;
+    -fx-font-size: 17;
 }
 
 .label {

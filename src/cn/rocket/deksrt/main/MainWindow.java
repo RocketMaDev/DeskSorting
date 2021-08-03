@@ -2,6 +2,8 @@ package cn.rocket.deksrt.main;
 
 import cn.rocket.deksrt.util.AutoIterator;
 import cn.rocket.deksrt.util.Student;
+import cn.rocket.deksrt.util.StudentList;
+import cn.rocket.deksrt.util.Util;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
@@ -13,36 +15,47 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellUtil;
+import org.apache.poi.xssf.usermodel.*;
 
-import java.io.File;
+import java.awt.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Objects;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
 
 /**
  * @author Rocket
- * @version 1.0
+ * @version 0.9-pre
  */
 public class MainWindow {
-    static Stage iodS;
+    private Stage iodS;
     private Parent iod;
     private JFXButton[][] btns;
     private JFXTextField[][] textfields;
     private Student[][] students;
+    private Student[][] saved;
     private int index;
-    private static final Font size15 = new Font(15);
-    private static final Font size12 = new Font(12);
+    private static final Font SIZE18 = new Font(18);
+    private static final Font SIZE15 = new Font(15);
 
+    @FXML
+    AnchorPane anchorPane;
+    @FXML
+    JFXButton copyright;
+    @FXML
+    JFXButton swapClass;
     @FXML
     JFXCheckBox quickSwapCB;
     @FXML
@@ -60,9 +73,12 @@ public class MainWindow {
     @FXML
     GridPane grid1;
 
-
-    private class ButtonEventHandler implements EventHandler {
-
+    /**
+     * A private internal class to swap two seat in the seat table.
+     *
+     * @param <T> ???
+     */
+    private class ButtonEventHandler<T extends Event> implements EventHandler<T> {
         private final int x;
         private final int y;
 
@@ -90,10 +106,13 @@ public class MainWindow {
             else
                 return;
         }
+
+
     }
 
     @FXML
     void initialize() throws IllegalAccessException {
+        GlobalVariables.mwObj = this;
         iod = null;
         try {
             iod = FXMLLoader.load(Objects.requireNonNull(
@@ -103,9 +122,11 @@ public class MainWindow {
             e.printStackTrace();
         }
         iodS = new Stage();
+        GlobalVariables.iodS = iodS;
         iodS.setResizable(false);
         iodS.setScene(new Scene(Objects.requireNonNull(iod)));
         iodS.setAlwaysOnTop(true);
+        iodS.setOnCloseRequest(event -> unlockMainWindow());
 
         students = new Student[7][8];
         btns = new JFXButton[7][8];
@@ -114,13 +135,13 @@ public class MainWindow {
         for (AutoIterator i = new AutoIterator(AutoIterator.SQUARE_ARRAY); i.hasNextWithUpdate(); i.next()) {
             JFXButton btn = new JFXButton();
             btns[i.y][i.x] = btn;
-            btn.setPrefSize(80, 45);
-            btn.setOnAction(new ButtonEventHandler(i.x, i.y));
-            btn.setFont(size15);
+            btn.setPrefSize(100, 60);
+            btn.setOnAction(new ButtonEventHandler<>(i.x, i.y));
+            btn.setFont(SIZE18);
 
             JFXTextField textField = new JFXTextField();
             textfields[i.y][i.x] = textField;
-            textField.setFont(size15);
+            textField.setFont(SIZE18);
             textField.setVisible(false);
             textField.setDisable(true);
         }
@@ -137,31 +158,60 @@ public class MainWindow {
     }
 
     @FXML
-    void impM(ActionEvent actionEvent) {
-        if (iodS.isShowing())
-            return;
+    void swapClassM() {
+        swapClass.setDisable(true);
+    }
+
+    @FXML
+    void copyrightM() throws URISyntaxException, IOException {
+        if (Desktop.isDesktopSupported())
+            Desktop.getDesktop().browse(new URI("https://github.com/RocketMaDev/DeskSorting"));
+    }
+
+    @FXML
+    void impM() {
+        lockMainWindow();
         iodS.setTitle("导入");
         Label il = (Label) iod.lookup("#iLal");
         il.setText("从...导入:");
-        JFXTextField jtf = (JFXTextField) iod.lookup("#iodTxtF");
-        jtf.setText("");
         iodS.show();
     }
 
+    /**
+     * @see MainWindow#importTable(BufferedInputStream)
+     */
+    void impl_importTable(BufferedInputStream in) throws IOException, IllegalAccessException {
+        if (saved != null) {
+            Alert alert = new Alert(GlobalVariables.GIVE_UP_LAYOUT_WARNING);
+            alert.setEventHandler(event -> {
+                try {
+                    importTable(in);
+                } catch (IllegalAccessException | IOException e) {
+                    e.printStackTrace();
+                }
+                unlockMainWindow();
+                alert.close();
+            }, event -> {
+                unlockMainWindow();
+                alert.close();
+            });
+            alert.show();
+        } else {
+            importTable(in);
+            unlockMainWindow();
+        }
+    }
+
     @FXML
-    void expM(ActionEvent actionEvent) {
-        if (iodS.isShowing())
-            return;
+    void expM() {
+        lockMainWindow();
         iodS.setTitle("导出");
         Label il = (Label) iod.lookup("#iLal");
         il.setText("导出至...:");
-        JFXTextField jtf = (JFXTextField) iod.lookup("#iodTxtF");
-        jtf.setText("");
         iodS.show();
     }
 
-    @FXML
-    void randM(ActionEvent actionEvent) {
+    private void randomSort() {
         LinkedList<Student> stus = new LinkedList<>(GlobalVariables.stuInfo);
         int[] t0 = new AutoIterator(AutoIterator.SQUARE_ARRAY).toArray();
         Integer[] t1 = new Integer[t0.length];
@@ -178,11 +228,33 @@ public class MainWindow {
             stus.remove(pstu);
             seats.remove(pseat);
         }
+        syncSaved(true);
         updateTable();
     }
 
     @FXML
-    void mslM(ActionEvent actionEvent) {
+    void randM() {
+        if (saved == null)
+            randomSort();
+        else {
+            lockMainWindow();
+            Alert alert = new Alert(GlobalVariables.GIVE_UP_LAYOUT_WARNING);
+            alert.setEventHandler(event -> {
+                randomSort();
+                unlockMainWindow();
+                alert.close();
+            }, event -> {
+                unlockMainWindow();
+                alert.close();
+            });
+            alert.show();
+        }
+    }
+
+    @FXML
+    void mslM() {
+        if (saved == null)
+            return;
         Student[][] shadow = new Student[7][10];
         for (int i = 1; i < 3; i++)
             System.arraycopy(students[i], 0, shadow[i - 1], 2, 8);
@@ -205,35 +277,194 @@ public class MainWindow {
         updateTable();
     }
 
-    void importTable(File tableFile) throws IllegalAccessException {
-        GlobalVariables.stuInfo.startSearching();
+    /**
+     * Import the seat table through the given file.
+     *
+     * @param in pointing at the file, which ends with ".xlsx" and contains a seat table
+     * @throws IllegalAccessException if there is wrong with stuInfo
+     * @throws IOException            if the file can't be read.
+     */
+    private void importTable(BufferedInputStream in) throws IllegalAccessException, IOException {
+        students = new Student[7][8];
+        StudentList<Student> stuInfo = GlobalVariables.stuInfo;
+        stuInfo.startSearching();
         DataFormatter formatter = new DataFormatter();
         XSSFWorkbook ctWorkbook = null;
+        OPCPackage opcPackage;
         try {
-            OPCPackage opcPackage = OPCPackage.open(tableFile);
+            opcPackage = OPCPackage.open(in);
             ctWorkbook = new XSSFWorkbook(opcPackage);
         } catch (InvalidFormatException | IOException e) {
             e.printStackTrace();
+            stuInfo.endSearching();
         }
         XSSFSheet table = Objects.requireNonNull(ctWorkbook).getSheetAt(0);
-
+        int[] chairColumns = {0, 2, 3, 5, 6, 8, 9, 11};
+        for (int row = 0; row < 6; row++) {
+            Row r = table.getRow(row);
+            if (r == null)
+                continue;
+            for (int col = 0; col < chairColumns.length; col++) {
+                Cell c = r.getCell(chairColumns[col], Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+                if (c != null)
+                    students[row][col] = stuInfo.searchByName(formatter.formatCellValue(c));
+            }
+        }
+        int[] frontColumns = {2, 3, 8, 9};
+        for (int col = 0; col < frontColumns.length; col++) {
+            Row r = table.getRow(7);
+            if (r == null)
+                continue;
+            Cell c = r.getCell(frontColumns[col], Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+            if (c != null)
+                students[6][col < 2 ? col + 1 : col + 3] = stuInfo.searchByName(formatter.formatCellValue(c)); // 把0,1映射到1,2;把2,3映射到5,6
+        }
+        headInfo.setText(formatter.formatCellValue(table.getRow(8).getCell(0)));
+        stuInfo.endSearching();
+        ctWorkbook.close();
+        syncSaved(true);
+        updateTable();
     }
 
-    void exportTable(String exportPath) {
-
+    /**
+     * Export the present table through an given BufferedOutputStream
+     *
+     * @param out the BufferedOutputStream to be written
+     * @throws IOException            if <code>out</code> can not be written
+     * @throws InvalidFormatException NEVER HAPPENS unless you delete <code>templateOfTable.xlsx</code>
+     */
+    void exportTable(BufferedOutputStream out) throws IOException, InvalidFormatException {
+        if (saved == null)
+            return;
+        InputStream in = MainWindow.class.getResourceAsStream(GlobalVariables.TABLE_TEMPLATE_P);
+        assert in != null;
+        OPCPackage pkg = OPCPackage.open(in);
+        XSSFWorkbook wb = new XSSFWorkbook(pkg);
+        int[] chairColumns = {0, 2, 3, 5, 6, 8, 9, 11};
+        XSSFSheet table = wb.getSheetAt(0);
+        for (int row = 0; row < 6; row++) {
+            XSSFRow r = table.getRow(row);
+            for (int col = 0; col < chairColumns.length; col++) {
+                writeCell(students[row][col],
+                        r.getCell(chairColumns[col], Row.MissingCellPolicy.RETURN_NULL_AND_BLANK));
+            }
+        }
+        int[] frontColumns = {2, 3, 8, 9};
+        for (int col = 0; col < frontColumns.length; col++) {
+            XSSFRow r = table.getRow(7);
+            int x = col < 2 ? col + 1 : col + 3;
+            writeCell(students[6][x],
+                    r.getCell(frontColumns[col], Row.MissingCellPolicy.RETURN_NULL_AND_BLANK));
+        }
+        table.getRow(8).getCell(0).setCellValue(headInfo.getText());
+        Calendar c = Calendar.getInstance();
+        String date = c.get(Calendar.YEAR) + Util.MONTH_NAME[c.get(Calendar.MONTH)] + c.get(Calendar.DAY_OF_MONTH);
+        wb.setSheetName(0, date);
+        wb.write(out);
+        out.close();
+        pkg.close();
+        syncSaved(false);
+        unlockMainWindow();
     }
 
+    /**
+     * Thanks help from @Axel Richter from Stack Overflow.<p>
+     * This method is written by him or her.<p>
+     * Method for getting current font from cell.
+     *
+     * @param cell the cell to search for its font
+     * @return the font of the <code>cell</code>
+     */
+    private static XSSFFont getFont(XSSFCell cell) {
+        XSSFWorkbook workbook = cell.getSheet().getWorkbook();
+        XSSFCellStyle style = cell.getCellStyle();
+        return workbook.getFontAt(style.getFontIndex());
+    }
+
+    /**
+     * Thanks help from @Axel Richter from Stack Overflow.<p>
+     * This method is written by him or her.<p>
+     * A method to write a cell.
+     *
+     * @param stu  the student to be stored
+     * @param cell the cell to be written
+     */
+    private void writeCell(Student stu, XSSFCell cell) {
+        XSSFWorkbook workbook = cell.getSheet().getWorkbook();
+        Map<String, Object> styleproperties;
+        Map<Util.FontProperty, Object> fontproperties;
+
+        //get or create the needed font 20pt
+        fontproperties = new HashMap<>();
+        fontproperties.put(Util.FontProperty.FONTHEIGHT, (short) (20 * 20));
+        XSSFFont font20 = Util.getFont(workbook, getFont(cell), fontproperties);
+        //get or create the needed font 17pt
+        fontproperties = new HashMap<>();
+        fontproperties.put(Util.FontProperty.FONTHEIGHT, (short) (17 * 20));
+        XSSFFont font17 = Util.getFont(workbook, getFont(cell), fontproperties);
+        //create style properties for cell
+        styleproperties = new HashMap<>();
+
+        if (stu == null) {
+            styleproperties.put(CellUtil.FILL_FOREGROUND_COLOR, IndexedColors.WHITE);
+            styleproperties.put(CellUtil.FONT, font20.getIndex());
+        } else {
+            cell.setCellValue(stu.getName());
+            styleproperties.put(CellUtil.FONT, stu.isLongName() ? font17.getIndex() : font20.getIndex());
+            styleproperties.put(CellUtil.FILL_FOREGROUND_COLOR, stu.isBoarding() ?
+                    IndexedColors.PALE_BLUE.getIndex() :
+                    IndexedColors.LIGHT_GREEN.getIndex());
+        }
+        styleproperties.put(CellUtil.FILL_PATTERN, FillPatternType.SOLID_FOREGROUND);
+
+        //set style properties to cell
+        CellUtil.setCellStyleProperties(cell, styleproperties);
+    }
+
+    /**
+     * Synchronize <code>saved</code>.
+     *
+     * @param withInit determines how to deal with a null <code>saved</code>.
+     */
+    private void syncSaved(boolean withInit) {
+        if (withInit && saved == null)
+            saved = new Student[7][8];
+        try {
+            for (AutoIterator i = new AutoIterator(AutoIterator.SQUARE_ARRAY); i.hasNextWithUpdate(); i.next())
+                saved[i.y][i.x] = students[i.y][i.x];
+        } catch (IllegalAccessException ignored) {
+        }
+    }
+
+    private void lockMainWindow() {
+        GlobalVariables.mainS.setOnCloseRequest(Event::consume);
+        anchorPane.setDisable(true);
+    }
+
+    void unlockMainWindow() {
+        GlobalVariables.mainS.setOnCloseRequest(event -> {
+        });
+        anchorPane.setDisable(false);
+    }
+
+    /**
+     * Update a single cell of the table.
+     *
+     * @param x x position
+     * @param y y position
+     */
     private void updateTable(int x, int y) {
         JFXButton btn = btns[y][x];
-        if (students[y][x] == null) {
+        Student stu = students[y][x];
+        if (stu == null) {
             btn.setText("");
         } else {
-            btn.setText(students[y][x].getName());
-            if (btn.getText().length()>4)
-                btn.setFont(size12);
+            btn.setText(stu.getName());
+            if (stu.isLongName())
+                btn.setFont(SIZE15);
             else
-                btn.setFont(size15);
-            btn.setTextFill(students[y][x].isBoarding() ? Paint.valueOf("BLUE") : Paint.valueOf("GREEN"));
+                btn.setFont(SIZE18);
+            btn.setTextFill(stu.isBoarding() ? Paint.valueOf("BLUE") : Paint.valueOf("GREEN"));
         }
         if (btn.isDisable())
             btn.setDisable(false);
@@ -243,12 +474,14 @@ public class MainWindow {
             textfields[y][x].setVisible(false);
     }
 
+    /**
+     * Update the whole table.
+     */
     private void updateTable() {
         try {
             for (AutoIterator i = new AutoIterator(AutoIterator.SQUARE_ARRAY); i.hasNextWithUpdate(); i.next())
                 updateTable(i.x, i.y);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (IllegalAccessException ignored) {
         }
     }
 

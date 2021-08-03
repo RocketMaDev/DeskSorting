@@ -1,5 +1,9 @@
 package cn.rocket.deksrt.util;
 
+/**
+ * @author Rocket
+ * @version 0.9-pre
+ */
 public class AutoIterator {
     public int x;
     public int y;

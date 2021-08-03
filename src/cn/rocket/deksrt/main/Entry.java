@@ -2,6 +2,7 @@ package cn.rocket.deksrt.main;
 
 import cn.rocket.deksrt.util.Student;
 import cn.rocket.deksrt.util.StudentList;
+import cn.rocket.deksrt.util.Util;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,7 +10,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
@@ -22,9 +26,9 @@ import java.util.Objects;
  * @version 1.0
  */
 public class Entry extends Application {
-
     @Override
     public void start(Stage primaryStage) throws Exception {
+        GlobalVariables.mainS = primaryStage;
 //        File propertiesFile = new File(GlobalVariables.env+"config.properties");
         if (!importStuInfo())
             System.out.println("errors:" + scanStuInfo());
@@ -35,7 +39,7 @@ public class Entry extends Application {
         ));
         primaryStage.setTitle("排座位");
         primaryStage.setResizable(false);
-        primaryStage.setScene(new Scene(root, 720, 500));
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
 
     }
@@ -77,14 +81,14 @@ public class Entry extends Application {
                 Cell c2 = r.getCell(2, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
 
                 if (c0 != null) {
-                    if (c1 == null || !GlobalVariables.validatePinyin((pinyin = df.formatCellValue(c1)))) {
+                    if (c1 == null || !Util.validatePinyin((pinyin = df.formatCellValue(c1)))) {
                         errors.append("B").append(row + 1).append(",");
                         continue;
                     }
                     if (c2 != null) {
                         String b = df.formatCellValue(c2);
                         if (!(b.equals("1") || b.equals("0"))) {
-                            errors.append("C").append(row + 1).append(",");
+                            errors.append(c2.getAddress()).append(",");
                             continue;
                         } else
                             boarding = b.equals("1");
@@ -97,9 +101,8 @@ public class Entry extends Application {
                     errors.append("A").append(row + 1).append(",");
                     continue;
                 }
-                queue = new Student(name, pinyin.toLowerCase(), boarding);
-                if (!stuIn.contains(queue))
-                    stuIn.add(new Student(name, pinyin.toLowerCase(), boarding));
+                if (!stuIn.add(new Student(name, pinyin.toLowerCase(), boarding)))
+                    errors.append(c0.getAddress()).append(",");
             }
             if (stuIn.size() == 0) {
                 System.err.println("No names in input file!");
