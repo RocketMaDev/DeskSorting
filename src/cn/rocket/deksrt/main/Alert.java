@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Rocket, Project DeskSorting
+ */
+
 package cn.rocket.deksrt.main;
 
 import com.jfoenix.controls.JFXButton;

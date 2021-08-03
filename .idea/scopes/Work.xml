@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Work" pattern="src:cn.rocket.deksrt.main..*||src:cn.rocket.deksrt.util.*||src:cn.rocket.deksrt.resource.*||src:cn.rocket.deksrt.exceptions.*" />
+</component>
