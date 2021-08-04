@@ -70,6 +70,7 @@ public class IEportDialog {
 
     @FXML
     void cancelM() {
+        GlobalVariables.mwObj.unlockMainWindow();
         GlobalVariables.iodS.close();
     }
 
@@ -90,6 +91,7 @@ public class IEportDialog {
             selected = fc.showSaveDialog(GlobalVariables.iodS);
         isFileChooserCreated = false;
         iodTxtF.setText(selected != null ? selected.getAbsolutePath() : "");
+        iodTxtF.appendText("");
     }
 
     @FXML
