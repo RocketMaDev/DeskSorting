@@ -8,6 +8,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -15,7 +16,6 @@ import javafx.stage.FileChooser;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import java.io.*;
-import java.net.URL;
 
 /**
  * @author Rocket
@@ -38,9 +38,8 @@ public class IEportDialog {
     @FXML
     void initialize() {
         iodTxtF.setText("");
-        URL iconU = IEportDialog.class.getResource("/cn/rocket/deksrt/resource/folder.png");
         iconBtn.setText("");
-        iconBtn.setGraphic(new ImageView(String.valueOf(iconU)));
+        iconBtn.setGraphic(new ImageView(new Image(GlobalVariables.FOLDER_ICON)));
     }
 
     @FXML

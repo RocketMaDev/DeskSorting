@@ -7,11 +7,20 @@ package cn.rocket.deksrt.main;
 import cn.rocket.deksrt.util.Student;
 import cn.rocket.deksrt.util.StudentList;
 import cn.rocket.deksrt.util.Util;
+import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
@@ -34,8 +43,14 @@ public class Entry extends Application {
     public void start(Stage primaryStage) throws Exception {
         GlobalVariables.mainS = primaryStage;
 //        File propertiesFile = new File(GlobalVariables.env+"config.properties");
-        if (!importStuInfo())
-            System.out.println("errors:" + scanStuInfo());
+        if (!importStuInfo()) {
+            String errors = scanStuInfo();
+            if (errors == null) {
+                showIntroduction(primaryStage);
+                return;
+            } else
+                System.out.println("errors:" + errors);
+        }
         exportStuInfo();
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(
@@ -45,7 +60,23 @@ public class Entry extends Application {
         primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+    }
 
+    private void showIntroduction(Stage primaryStage) {
+        JFXButton btn = new JFXButton("关闭");
+        btn.setButtonType(JFXButton.ButtonType.RAISED);
+        btn.setTextFill(Paint.valueOf("white"));
+        btn.setFont(Font.font(25));
+        btn.setOnAction(event -> primaryStage.close());
+        btn.setBackground(new Background(new BackgroundFill(Paint.valueOf("dodgerblue"), null, null)));
+        AnchorPane pane = new AnchorPane();
+        AnchorPane.setTopAnchor(btn, 100.0);
+        AnchorPane.setRightAnchor(btn, 100.0);
+        pane.setPrefSize(970, 700);
+        pane.getChildren().addAll(new ImageView(new Image(GlobalVariables.INTRODUCTION)), btn);
+        primaryStage.setScene(new Scene(pane));
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.show();
     }
 
     /**
@@ -61,7 +92,7 @@ public class Entry extends Application {
         if (!infoXlsx.exists()) {
             assert in != null;
             Files.copy(in, infoXlsx.toPath());
-            System.exit(99);
+            return null;
         } else {
             OPCPackage opcPackage = OPCPackage.open(infoXlsx);
             XSSFWorkbook wb = new XSSFWorkbook(opcPackage);
@@ -71,7 +102,6 @@ public class Entry extends Application {
             Sheet sheet = wb.getSheetAt(0);
             DataFormatter df = new DataFormatter();
 
-            Student queue;
             String name;
             String pinyin;
             boolean boarding;
@@ -79,11 +109,9 @@ public class Entry extends Application {
                 Row r = sheet.getRow(row);
                 if (r == null)
                     continue;
-
                 Cell c0 = r.getCell(0, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
                 Cell c1 = r.getCell(1, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
                 Cell c2 = r.getCell(2, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
-
                 if (c0 != null) {
                     if (c1 == null || !Util.validatePinyin((pinyin = df.formatCellValue(c1)))) {
                         errors.append("B").append(row + 1).append(",");
@@ -108,8 +136,8 @@ public class Entry extends Application {
                 if (!stuIn.add(new Student(name, pinyin.toLowerCase(), boarding)))
                     errors.append(c0.getAddress()).append(",");
             }
-            if (stuIn.size() == 0) {
-                System.err.println("No names in input file!");
+            if (stuIn.size() < 2) {
+                System.err.println("Too less names in input file!");
                 System.exit(100);
             }
             System.out.println("name\tpy\tboarding");
@@ -117,7 +145,6 @@ public class Entry extends Application {
                 System.out.println(student);
             wb.close();
         }
-
         return errors.length() != 0 ? errors.deleteCharAt(errors.length() - 1).toString() : "";
     }
 
@@ -200,7 +227,6 @@ public class Entry extends Application {
                 //noinspection ResultOfMethodCallIgnored
                 stuInfoFile.delete();
         }
-
 
         launch(args);
     }

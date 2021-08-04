@@ -461,6 +461,7 @@ public class MainWindow {
         JFXButton btn = btns[y][x];
         Student stu = students[y][x];
         if (stu == null) {
+            btn.setTextFill(Paint.valueOf("black"));
             btn.setText("");
         } else {
             btn.setText(stu.getName());
