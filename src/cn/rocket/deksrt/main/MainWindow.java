@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Rocket, Project DeskSorting
+ * Copyright (c) 2022 Rocket, Project DeskSorting
  */
 
 package cn.rocket.deksrt.main;
@@ -107,8 +107,9 @@ public class MainWindow {
                     updateTable(x0, y0);
                     updateTable(x, y);
                 }
-            else
-                return;
+            else {
+                // TODO 处理普通点按
+            }
         }
 
 
