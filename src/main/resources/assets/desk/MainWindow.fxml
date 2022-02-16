@@ -95,7 +95,7 @@
         </font>
     </Label>
     <JFXButton fx:id="copyright" layoutX="6.0" layoutY="571.0" onAction="#copyrightM"
-               text="© Copyright 2021 Rocket, 遵循MIT开源协议" textFill="#4d4d4d" AnchorPane.bottomAnchor="0.0"
+               text="© Copyright 2020-2022 Rocket, 遵循MIT开源协议" textFill="#4d4d4d" AnchorPane.bottomAnchor="0.0"
                AnchorPane.leftAnchor="0.0">
         <font>
             <Font size="18.0"/>
