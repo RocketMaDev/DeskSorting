@@ -2,8 +2,9 @@
  * Copyright (c) 2021 Rocket, Project DeskSorting
  */
 
-package cn.rocket.deksrt.main;
+package cn.rocket.deksrt.core;
 
+import cn.rocket.deksrt.gui.MainWindow;
 import cn.rocket.deksrt.util.Student;
 import cn.rocket.deksrt.util.StudentList;
 import javafx.stage.Stage;
@@ -12,7 +13,7 @@ import javafx.stage.Stage;
  * @author Rocket
  * @version 0.9-pre
  */
-class GlobalVariables {
+class Vars {
     static String jarPath; // With '/'
     static String jarParentPath; // With '/'
 

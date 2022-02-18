@@ -2,8 +2,9 @@
  * Copyright (c) 2022 Rocket, Project DeskSorting
  */
 
-package cn.rocket.deksrt.main;
+package cn.rocket.deksrt.gui;
 
+import cn.rocket.deksrt.core.GlobalVariables;
 import cn.rocket.deksrt.util.AutoIterator;
 import cn.rocket.deksrt.util.Student;
 import cn.rocket.deksrt.util.StudentList;
@@ -401,11 +402,11 @@ public class MainWindow {
 
         //get or create the needed font 20pt
         fontproperties = new HashMap<>();
-        fontproperties.put(Util.FontProperty.FONTHEIGHT, (short) (20 * 20));
+        fontproperties.put(Util.FontProperty.FONT_HEIGHT, (short) (20 * 20));
         XSSFFont font20 = Util.getFont(workbook, getFont(cell), fontproperties);
         //get or create the needed font 17pt
         fontproperties = new HashMap<>();
-        fontproperties.put(Util.FontProperty.FONTHEIGHT, (short) (17 * 20));
+        fontproperties.put(Util.FontProperty.FONT_HEIGHT, (short) (17 * 20));
         XSSFFont font17 = Util.getFont(workbook, getFont(cell), fontproperties);
         //create style properties for cell
         styleproperties = new HashMap<>();

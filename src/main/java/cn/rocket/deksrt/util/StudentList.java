@@ -39,27 +39,26 @@ public class StudentList<E> extends ArrayList<E> {
         searching = false;
     }
 
-    public void startSearching() throws IllegalAccessException {
+    public void startSearching() {
         if (searching)
-            throw new IllegalAccessException("Have started searching");
+            throw new IllegalStateException("Have started searching");
         searching = true;
         hasSearched = new boolean[toArray().length];
     }
 
-    public void endSearching() throws IllegalAccessException {
+    public void endSearching() {
         if (!searching)
-            throw new IllegalAccessException("Have ended searching");
+            throw new IllegalStateException("Have ended searching");
         searching = false;
         hasSearched = null;
     }
 
-    @SuppressWarnings("unchecked")
-    public E searchByName(String name) throws IllegalAccessException {
+    public Student searchByName(String name) {
         if (!searching)
-            throw new IllegalAccessException("You need to invoke startSearching() first");
+            throw new IllegalStateException("You need to invoke startSearching() first");
         Object[] elements = toArray();
         if (!(elements[0] instanceof Student))
-            throw new IllegalAccessException("Only used for Student class!");
+            throw new IllegalStateException("Only used for Student class!");
         Student[] list = new Student[elements.length];
         for (int i = 0; i < elements.length; i++) {
             list[i] = (Student) elements[i];
@@ -70,7 +69,7 @@ public class StudentList<E> extends ArrayList<E> {
                     return null;
                 else {
                     hasSearched[i] = true;
-                    return (E) list[i];
+                    return list[i];
                 }
         }
         return null;

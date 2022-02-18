@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: cn.rocket.deksrt.main.Entry
-Specification-Title: DeskSorting
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Specification-Version: 0.9-pre
-Built-By: Rocket

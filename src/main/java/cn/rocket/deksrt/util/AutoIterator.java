@@ -18,7 +18,7 @@ public class AutoIterator {
     public static final int GRID0 = 1;
     public static final int GRID1 = 2;
 
-    public AutoIterator(int mode) throws IllegalArgumentException {
+    public AutoIterator(int mode) {
         if (mode < 0 || mode > 2)
             throw new IllegalArgumentException("Unknown mode code");
         switch (mode) {
@@ -51,9 +51,9 @@ public class AutoIterator {
         pos = 0;
     }
 
-    public void next() throws IllegalAccessException {
+    public void next() {
         if (!hasNext())
-            throw new IllegalAccessException("No more element");
+            throw new IllegalStateException("No more element");
         pos++;
     }
 
@@ -72,9 +72,9 @@ public class AutoIterator {
         return pos != content.length;
     }
 
-    public int getPos() throws IllegalAccessException {
+    public int getPos() {
         if (content.length != 4)
-            throw new IllegalAccessException("You can not access pos if you are not working with grid1");
+            throw new IllegalStateException("You can not access pos if you are not working with grid1");
         return pos;
     }
 

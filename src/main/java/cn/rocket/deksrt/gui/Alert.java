@@ -1,9 +1,10 @@
 /*
- * Copyright (c) 2021 Rocket, Project DeskSorting
+ * Copyright (c) 2022 Rocket, Project DeskSorting
  */
 
-package cn.rocket.deksrt.main;
+package cn.rocket.deksrt.gui;
 
+import cn.rocket.deksrt.core.GlobalVariables;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

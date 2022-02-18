@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class Util {
     public enum FontProperty {
-        BOLD, COLOR, FONTHEIGHT, FONTNAME, ITALIC, STRIKEOUT, TYPEOFFSET, UNDERLINE
+        BOLD, COLOR, FONT_HEIGHT, FONT_NAME, ITALIC, STRIKEOUT, TYPE_OFFSET, UNDERLINE
     }
 
     public static String[] MONTH_NAME = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -48,10 +48,10 @@ public class Util {
                 case COLOR:
                     color = (short) fontproperties.get(property);
                     break;
-                case FONTHEIGHT:
+                case FONT_HEIGHT:
                     fontHeight = (short) fontproperties.get(property);
                     break;
-                case FONTNAME:
+                case FONT_NAME:
                     fontName = (String) fontproperties.get(property);
                     break;
                 case ITALIC:
@@ -60,7 +60,7 @@ public class Util {
                 case STRIKEOUT:
                     isStrikeout = (boolean) fontproperties.get(property);
                     break;
-                case TYPEOFFSET:
+                case TYPE_OFFSET:
                     typeOffset = (short) fontproperties.get(property);
                     break;
                 case UNDERLINE:

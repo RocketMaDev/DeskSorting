@@ -1,9 +1,10 @@
 /*
- * Copyright (c) 2021 Rocket, Project DeskSorting
+ * Copyright (c) 2022 Rocket, Project DeskSorting
  */
 
-package cn.rocket.deksrt.main;
+package cn.rocket.deksrt.gui;
 
+import cn.rocket.deksrt.core.GlobalVariables;
 import cn.rocket.deksrt.util.Student;
 import cn.rocket.deksrt.util.StudentList;
 import cn.rocket.deksrt.util.Util;
@@ -38,7 +39,7 @@ import java.util.Objects;
  * @author Rocket
  * @version 1.0
  */
-public class Entry extends Application {
+public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         GlobalVariables.mainS = primaryStage;
@@ -217,7 +218,7 @@ public class Entry extends Application {
      * @param args [0]:--reset?delete student.info
      */
     public static void main(String[] args) {
-        GlobalVariables.jarPath = Entry.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        GlobalVariables.jarPath = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         GlobalVariables.jarParentPath = new File(GlobalVariables.jarPath).getParent() + "/";
 
         // 重置 参数

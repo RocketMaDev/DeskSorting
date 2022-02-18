@@ -93,7 +93,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>cn.rocket.deksrt.main.Entry</mainClass>
+                                    <mainClass>cn.rocket.deksrt.gui.Main</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>
