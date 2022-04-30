@@ -5,6 +5,7 @@
 package cn.rocket.deksrt.gui;
 
 import cn.rocket.deksrt.core.GlobalVariables;
+import cn.rocket.deksrt.gui.interfaces.Alert;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -22,7 +23,7 @@ import javafx.stage.StageStyle;
  * @author Rocket
  * @version 0.9-pre
  */
-public class Alert {
+public class SimpleAlert implements Alert {
     private final Stage alertStage = new Stage(StageStyle.UNDECORATED);
     private static final double GAP = 25;
     private static final double FONT_SIZE = 20;
@@ -31,7 +32,7 @@ public class Alert {
     private final AnchorPane anchorPane;
     private final Label text;
 
-    public Alert(String message) {
+    public SimpleAlert(String message) {
         ok = new JFXButton("确定");
         ok.setFont(Font.font(FONT_SIZE));
         ok.setTextFill(Paint.valueOf("dodgerblue"));

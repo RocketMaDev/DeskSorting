@@ -4,32 +4,25 @@
 
 package cn.rocket.deksrt.core;
 
-import cn.rocket.deksrt.gui.MainWindow;
+import cn.rocket.deksrt.gui.interfaces.Controller;
 import cn.rocket.deksrt.util.Student;
 import cn.rocket.deksrt.util.StudentList;
 import javafx.stage.Stage;
+
+import java.util.HashMap;
 
 /**
  * @author Rocket
  * @version 0.9-pre
  */
-class Vars {
-    static String jarPath; // With '/'
-    static String jarParentPath; // With '/'
+public class Vars {
 
-    static MainWindow mwObj;
-    static Stage mainS;
-    static Stage iodS;
-    static StudentList<Student> stuInfo;
+    public static final HashMap<Class<?>, Object> objMap = new HashMap<>();
+    public static final HashMap<Controller, Stage> stageMap = new HashMap<>();
+    public static StudentList<Student> stuInfo;
 
-    static final String ENV = System.getenv("USERPROFILE") + "/.rocketdev/DeskSorting/";
-    static final String STUDENT_INFO = ENV + "student.info";
-    static final String RESOURCE_PATH = "/cn/rocket/deksrt/resource/";
-    static final String STU_INFO_TEMPLATE_P = RESOURCE_PATH + "templateOfStuInfo.xlsx";
-    static final String TABLE_TEMPLATE_P = RESOURCE_PATH + "templateOfTable.xlsx";
-    static final String MAIN_WINDOW_FXML = RESOURCE_PATH + "MainWindow.fxml";
-    static final String FOLDER_ICON = RESOURCE_PATH + "folder.png";
-    static final String INTRODUCTION = RESOURCE_PATH + "introduction.png";
 
     static final String GIVE_UP_LAYOUT_WARNING = "是否放弃当前布局？";
+
+
 }

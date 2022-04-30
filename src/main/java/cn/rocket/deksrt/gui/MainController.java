@@ -5,6 +5,7 @@
 package cn.rocket.deksrt.gui;
 
 import cn.rocket.deksrt.core.GlobalVariables;
+import cn.rocket.deksrt.gui.interfaces.Controller;
 import cn.rocket.deksrt.util.AutoIterator;
 import cn.rocket.deksrt.util.Student;
 import cn.rocket.deksrt.util.StudentList;
@@ -44,7 +45,7 @@ import java.util.*;
  * @author Rocket
  * @version 0.9-pre
  */
-public class MainWindow {
+public class MainController implements Controller {
     private Stage iodS;
     private Parent iod;
     private JFXButton[][] btns;
@@ -122,7 +123,7 @@ public class MainWindow {
         iod = null;
         try {
             iod = FXMLLoader.load(Objects.requireNonNull(
-                    MainWindow.class.getResource("/cn/rocket/deksrt/resource/IEportDialog.fxml")
+                    MainController.class.getResource("/cn/rocket/deksrt/resource/IEportDialog.fxml")
             ));
         } catch (IOException e) {
             e.printStackTrace();
@@ -184,11 +185,11 @@ public class MainWindow {
     }
 
     /**
-     * @see MainWindow#importTable(BufferedInputStream)
+     * @see MainController#importTable(BufferedInputStream)
      */
     void impl_importTable(BufferedInputStream in) throws IOException, IllegalAccessException {
         if (saved != null) {
-            Alert alert = new Alert(GlobalVariables.GIVE_UP_LAYOUT_WARNING);
+            SimpleAlert alert = new SimpleAlert(GlobalVariables.GIVE_UP_LAYOUT_WARNING);
             alert.setEventHandler(event -> {
                 try {
                     importTable(in);
@@ -244,7 +245,7 @@ public class MainWindow {
             randomSort();
         else {
             lockMainWindow();
-            Alert alert = new Alert(GlobalVariables.GIVE_UP_LAYOUT_WARNING);
+            SimpleAlert alert = new SimpleAlert(GlobalVariables.GIVE_UP_LAYOUT_WARNING);
             alert.setEventHandler(event -> {
                 randomSort();
                 unlockMainWindow();
@@ -342,7 +343,7 @@ public class MainWindow {
     void exportTable(BufferedOutputStream out) throws IOException, InvalidFormatException {
         if (saved == null)
             return;
-        InputStream in = MainWindow.class.getResourceAsStream(GlobalVariables.TABLE_TEMPLATE_P);
+        InputStream in = MainController.class.getResourceAsStream(GlobalVariables.TABLE_TEMPLATE_P);
         assert in != null;
         OPCPackage pkg = OPCPackage.open(in);
         XSSFWorkbook wb = new XSSFWorkbook(pkg);

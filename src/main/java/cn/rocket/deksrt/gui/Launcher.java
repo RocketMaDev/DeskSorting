@@ -39,7 +39,7 @@ import java.util.Objects;
  * @author Rocket
  * @version 1.0
  */
-public class Main extends Application {
+public class Launcher extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         GlobalVariables.mainS = primaryStage;
@@ -218,7 +218,7 @@ public class Main extends Application {
      * @param args [0]:--reset?delete student.info
      */
     public static void main(String[] args) {
-        GlobalVariables.jarPath = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        GlobalVariables.jarPath = Launcher.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         GlobalVariables.jarParentPath = new File(GlobalVariables.jarPath).getParent() + "/";
 
         // 重置 参数
