@@ -5,8 +5,6 @@
 package cn.rocket.deksrt.core;
 
 import cn.rocket.deksrt.gui.interfaces.Controller;
-import cn.rocket.deksrt.util.Student;
-import cn.rocket.deksrt.util.StudentList;
 import javafx.stage.Stage;
 
 import java.util.HashMap;

@@ -2,32 +2,51 @@
  * Copyright (c) 2021 Rocket, Project DeskSorting
  */
 
-package cn.rocket.deksrt.util;
+package cn.rocket.deksrt.core;
+
+import java.util.Iterator;
+
+import static cn.rocket.deksrt.core.Util.*;
 
 /**
  * @author Rocket
  * @version 0.9-pre
  */
-public class AutoIterator {
+public class GridIterator<T> implements Iterable<T> {
     public int x;
     public int y;
     private int pos;
-    private int[] content;
+    private final int[] content;
 
-    public static final int SQUARE_ARRAY = 0;
-    public static final int GRID0 = 1;
-    public static final int GRID1 = 2;
+    public class Itr implements Iterator<T> {
+        private int index = 0;
 
-    public AutoIterator(int mode) {
-        if (mode < 0 || mode > 2)
-            throw new IllegalArgumentException("Unknown mode code");
+        @Override
+        public boolean hasNext() {
+            return index != content.length;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public T next() {
+            return (T) new Pair(content[index++]);
+        }
+    }
+
+    public enum IterType {
+        FULL_GRID,
+        GRID0,
+        GRID1
+    }
+
+    public GridIterator(IterType mode) {
         switch (mode) {
-            case SQUARE_ARRAY:
+            case FULL_GRID:
                 content = new int[52];
                 pos = 0;
                 for (int x = 0; x < 8; x++)
                     for (int y = 0; y < 6; y++) {
-                        content[pos] = x * 10 + y;
+                        content[pos] = store(x, y);
                         pos++;
                     }
                 content[content.length - 4] = 16;
@@ -40,36 +59,27 @@ public class AutoIterator {
                 pos = 0;
                 for (int x = 0; x < 8; x++)
                     for (int y = 0; y < 6; y++) {
-                        content[pos] = x * 10 + y;
+                        content[pos] = store(x, y);
                         pos++;
                     }
                 break;
             case GRID1:
                 content = new int[]{0, 10, 30, 40};
                 break;
+            default:
+                throw new IllegalArgumentException("mode must be one of keywords in IterType.");
         }
         pos = 0;
     }
 
-    public void next() {
-        if (!hasNext())
-            throw new IllegalStateException("No more element");
-        pos++;
-    }
+    public static class Pair {
+        public int x;
+        public int y;
 
-    public boolean hasNextWithUpdate() {
-        if (hasNext())
-            update();
-        return hasNext();
-    }
-
-    public void update() {
-        x = content[pos] / 10;
-        y = content[pos] % 10;
-    }
-
-    public boolean hasNext() {
-        return pos != content.length;
+        public Pair(int xy) {
+            x = readX(xy);
+            y = readY(xy);
+        }
     }
 
     public int getPos() {
@@ -81,4 +91,10 @@ public class AutoIterator {
     public int[] toArray() {
         return content;
     }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new Itr();
+    }
+
 }

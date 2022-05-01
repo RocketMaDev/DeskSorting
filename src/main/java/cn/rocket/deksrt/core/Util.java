@@ -2,7 +2,7 @@
  * Copyright (c) 2021 Rocket, Project DeskSorting
  */
 
-package cn.rocket.deksrt.util;
+package cn.rocket.deksrt.core;
 
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -98,5 +98,17 @@ public class Util {
                 return false;
         }
         return true;
+    }
+
+    public static int store(int x, int y) {
+        return x << 4 | y;
+    }
+
+    public static int readX(int xy) {
+        return xy >> 4;
+    }
+
+    public static int readY(int xy) {
+        return xy & 0b1111;
     }
 }

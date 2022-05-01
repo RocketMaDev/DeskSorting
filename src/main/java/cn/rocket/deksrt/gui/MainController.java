@@ -4,12 +4,8 @@
 
 package cn.rocket.deksrt.gui;
 
-import cn.rocket.deksrt.core.GlobalVariables;
+import cn.rocket.deksrt.core.*;
 import cn.rocket.deksrt.gui.interfaces.Controller;
-import cn.rocket.deksrt.util.AutoIterator;
-import cn.rocket.deksrt.util.Student;
-import cn.rocket.deksrt.util.StudentList;
-import cn.rocket.deksrt.util.Util;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
@@ -139,7 +135,7 @@ public class MainController implements Controller {
         btns = new JFXButton[7][8];
         textfields = new JFXTextField[7][8];
 
-        for (AutoIterator i = new AutoIterator(AutoIterator.SQUARE_ARRAY); i.hasNextWithUpdate(); i.next()) {
+        for (GridIterator i = new GridIterator(GridIterator.SQUARE_ARRAY); i.hasNextWithUpdate(); i.next()) {
             JFXButton btn = new JFXButton();
             btns[i.y][i.x] = btn;
             btn.setPrefSize(100, 60);
@@ -152,11 +148,11 @@ public class MainController implements Controller {
             textField.setVisible(false);
             textField.setDisable(true);
         }
-        for (AutoIterator i = new AutoIterator(AutoIterator.GRID0); i.hasNextWithUpdate(); i.next()) {
+        for (GridIterator i = new GridIterator(GridIterator.GRID0); i.hasNextWithUpdate(); i.next()) {
             grid0.add(btns[i.y][i.x], i.x, i.y);
             grid0.add(textfields[i.y][i.x], i.x, i.y);
         }
-        for (AutoIterator i = new AutoIterator(AutoIterator.GRID1); i.hasNextWithUpdate(); i.next()) {
+        for (GridIterator i = new GridIterator(GridIterator.GRID1); i.hasNextWithUpdate(); i.next()) {
             int col = i.x < 3 ? i.x + 1 : i.x + 2;
             grid1.add(btns[6][col], i.x, i.y);
             grid1.add(textfields[6][col], i.x, i.y);
@@ -220,7 +216,7 @@ public class MainController implements Controller {
 
     private void randomSort() {
         LinkedList<Student> stus = new LinkedList<>(GlobalVariables.stuInfo);
-        int[] t0 = new AutoIterator(AutoIterator.SQUARE_ARRAY).toArray();
+        int[] t0 = new GridIterator(GridIterator.SQUARE_ARRAY).toArray();
         Integer[] t1 = new Integer[t0.length];
         for (int i = 0; i < t0.length; i++)
             t1[i] = t0[i];
@@ -437,7 +433,7 @@ public class MainController implements Controller {
         if (withInit && saved == null)
             saved = new Student[7][8];
         try {
-            for (AutoIterator i = new AutoIterator(AutoIterator.SQUARE_ARRAY); i.hasNextWithUpdate(); i.next())
+            for (GridIterator i = new GridIterator(GridIterator.SQUARE_ARRAY); i.hasNextWithUpdate(); i.next())
                 saved[i.y][i.x] = students[i.y][i.x];
         } catch (IllegalAccessException ignored) {
         }
@@ -487,7 +483,7 @@ public class MainController implements Controller {
      */
     private void updateTable() {
         try {
-            for (AutoIterator i = new AutoIterator(AutoIterator.SQUARE_ARRAY); i.hasNextWithUpdate(); i.next())
+            for (GridIterator i = new GridIterator(GridIterator.SQUARE_ARRAY); i.hasNextWithUpdate(); i.next())
                 updateTable(i.x, i.y);
         } catch (IllegalAccessException ignored) {
         }

@@ -2,7 +2,7 @@
  * Copyright (c) 2021 Rocket, Project DeskSorting
  */
 
-package cn.rocket.deksrt.util;
+package cn.rocket.deksrt.core;
 
 import java.util.ArrayList;
 import java.util.Collection;

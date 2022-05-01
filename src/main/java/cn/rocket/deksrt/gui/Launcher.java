@@ -5,9 +5,9 @@
 package cn.rocket.deksrt.gui;
 
 import cn.rocket.deksrt.core.GlobalVariables;
-import cn.rocket.deksrt.util.Student;
-import cn.rocket.deksrt.util.StudentList;
-import cn.rocket.deksrt.util.Util;
+import cn.rocket.deksrt.core.Student;
+import cn.rocket.deksrt.core.StudentList;
+import cn.rocket.deksrt.core.Util;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
