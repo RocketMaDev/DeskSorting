@@ -2,10 +2,9 @@
  * Copyright (c) 2022 Rocket, Project DeskSorting
  */
 
-package cn.rocket.deksrt.gui;
+package cn.rocket.deksrt.gui.alert;
 
-import cn.rocket.deksrt.core.GlobalVariables;
-import cn.rocket.deksrt.gui.interfaces.Alert;
+import cn.rocket.deksrt.gui.ctrler.Controller;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -31,8 +30,10 @@ public class SimpleAlert implements Alert {
     private final JFXButton cancel;
     private final AnchorPane anchorPane;
     private final Label text;
+    private final Controller ctrler;
 
-    public SimpleAlert(String message) {
+    public SimpleAlert(String message, boolean enableCancel, Controller ctrler) {
+        this.ctrler = ctrler;
         ok = new JFXButton("确定");
         ok.setFont(Font.font(FONT_SIZE));
         ok.setTextFill(Paint.valueOf("dodgerblue"));
@@ -59,7 +60,7 @@ public class SimpleAlert implements Alert {
         Scene scene = new Scene(anchorPane);
         alertStage.setScene(scene);
         alertStage.setAlwaysOnTop(true);
-        alertStage.setOnCloseRequest(event -> GlobalVariables.mwObj.unlockMainWindow());
+        alertStage.setOnCloseRequest(event -> ctrler.unlockMainWindow());
     }
 
     public void setEventHandler(EventHandler<ActionEvent> okHandler, EventHandler<ActionEvent> cancelHandler) {

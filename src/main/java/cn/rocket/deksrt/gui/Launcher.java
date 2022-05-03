@@ -4,10 +4,8 @@
 
 package cn.rocket.deksrt.gui;
 
-import cn.rocket.deksrt.core.GlobalVariables;
-import cn.rocket.deksrt.core.Student;
-import cn.rocket.deksrt.core.StudentList;
-import cn.rocket.deksrt.core.Util;
+import cn.rocket.deksrt.core.*;
+import cn.rocket.deksrt.gui.ctrler.MainController;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -33,7 +31,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Objects;
 
 /**
  * @author Rocket
@@ -42,7 +39,7 @@ import java.util.Objects;
 public class Launcher extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        GlobalVariables.mainS = primaryStage;
+        Vars.stageMap.put(MainController.class, primaryStage);
 //        File propertiesFile = new File(GlobalVariables.env+"config.properties");
         if (!importStuInfo()) {
             String errors = scanStuInfo();
@@ -54,9 +51,9 @@ public class Launcher extends Application {
         }
         exportStuInfo();
 
-        Parent root = FXMLLoader.load(Objects.requireNonNull(
-                getClass().getResource(GlobalVariables.MAIN_WINDOW_FXML)
-        ));
+        Parent root = FXMLLoader.load(
+                getClass().getResource(LocalURL.MAIN_WINDOW_FXML)
+        );
         primaryStage.setTitle("排座位");
         primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(root));
@@ -171,7 +168,7 @@ public class Launcher extends Application {
         }
         sb.deleteCharAt(sb.length() - 1).append(';');
         sb.deleteCharAt(sb.length() - 1);
-        try (OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(infoFile), StandardCharsets.UTF_8)) {
+        try (OutputStreamWriter osw = new OutputStreamWriter(Files.newOutputStream(infoFile.toPath()), StandardCharsets.UTF_8)) {
             osw.write(sb.toString());
             osw.flush();
         } catch (IOException e) {
@@ -189,7 +186,7 @@ public class Launcher extends Application {
             return false;
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
-                        new FileInputStream(infoFile), StandardCharsets.UTF_8))) {
+                        Files.newInputStream(infoFile.toPath()), StandardCharsets.UTF_8))) {
             info = reader.readLine();
         } catch (IOException e) {
             e.printStackTrace();

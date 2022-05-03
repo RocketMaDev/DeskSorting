@@ -2,10 +2,13 @@
  * Copyright (c) 2022 Rocket, Project DeskSorting
  */
 
-package cn.rocket.deksrt.gui;
+package cn.rocket.deksrt.gui.ctrler;
 
-import cn.rocket.deksrt.core.*;
-import cn.rocket.deksrt.gui.interfaces.Controller;
+import cn.rocket.deksrt.core.GridIterator;
+import cn.rocket.deksrt.core.Student;
+import cn.rocket.deksrt.core.StudentList;
+import cn.rocket.deksrt.core.Util;
+import cn.rocket.deksrt.gui.alert.SimpleAlert;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
@@ -44,9 +47,7 @@ import java.util.*;
 public class MainController implements Controller {
     private Stage iodS;
     private Parent iod;
-    private JFXButton[][] btns;
-    private JFXTextField[][] textfields;
-    private Student[][] students;
+
     private Student[][] saved;
     private int index;
     private static final Font SIZE18 = new Font(18);

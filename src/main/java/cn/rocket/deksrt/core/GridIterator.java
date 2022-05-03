@@ -73,8 +73,16 @@ public class GridIterator<T> implements Iterable<T> {
     }
 
     public static class Pair {
-        public int x;
-        public int y;
+        private final int x;
+        private final int y;
+
+        public int x() {
+            return x;
+        }
+
+        public int y() {
+            return y;
+        }
 
         public Pair(int xy) {
             x = readX(xy);

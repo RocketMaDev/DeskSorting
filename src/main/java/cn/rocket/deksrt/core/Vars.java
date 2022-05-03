@@ -4,7 +4,6 @@
 
 package cn.rocket.deksrt.core;
 
-import cn.rocket.deksrt.gui.interfaces.Controller;
 import javafx.stage.Stage;
 
 import java.util.HashMap;
@@ -16,8 +15,8 @@ import java.util.HashMap;
 public class Vars {
 
     public static final HashMap<Class<?>, Object> objMap = new HashMap<>();
-    public static final HashMap<Controller, Stage> stageMap = new HashMap<>();
-    public static StudentList<Student> stuInfo;
+    public static final HashMap<Class<?>, Stage> stageMap = new HashMap<>();
+    public static StudentList stuInfo;
 
 
     static final String GIVE_UP_LAYOUT_WARNING = "是否放弃当前布局？";
