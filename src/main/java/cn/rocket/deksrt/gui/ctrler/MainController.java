@@ -4,10 +4,7 @@
 
 package cn.rocket.deksrt.gui.ctrler;
 
-import cn.rocket.deksrt.core.GridIterator;
-import cn.rocket.deksrt.core.Student;
-import cn.rocket.deksrt.core.StudentList;
-import cn.rocket.deksrt.core.Util;
+import cn.rocket.deksrt.core.*;
 import cn.rocket.deksrt.gui.alert.SimpleAlert;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -75,6 +72,16 @@ public class MainController implements Controller {
     JFXTextField headInfo;
     @FXML
     GridPane grid1;
+
+    @Override
+    public void lockWindow() {
+
+    }
+
+    @Override
+    public void unlockWindow() {
+
+    }
 
     /**
      * A private internal class to swap two seat in the seat table.
@@ -216,7 +223,7 @@ public class MainController implements Controller {
     }
 
     private void randomSort() {
-        LinkedList<Student> stus = new LinkedList<>(GlobalVariables.stuInfo);
+        LinkedList<Student> stus = new LinkedList<>(Vars.stuInfo);//TODO 用fori逐个添加
         int[] t0 = new GridIterator(GridIterator.SQUARE_ARRAY).toArray();
         Integer[] t1 = new Integer[t0.length];
         for (int i = 0; i < t0.length; i++)
@@ -290,7 +297,7 @@ public class MainController implements Controller {
      */
     private void importTable(BufferedInputStream in) throws IllegalAccessException, IOException {
         students = new Student[7][8];
-        StudentList<Student> stuInfo = GlobalVariables.stuInfo;
+        StudentList<Student> stuInfo = Vars.stuInfo;
         stuInfo.startSearching();
         DataFormatter formatter = new DataFormatter();
         XSSFWorkbook ctWorkbook = null;
@@ -434,8 +441,8 @@ public class MainController implements Controller {
         if (withInit && saved == null)
             saved = new Student[7][8];
         try {
-            for (GridIterator i = new GridIterator(GridIterator.SQUARE_ARRAY); i.hasNextWithUpdate(); i.next())
-                saved[i.y][i.x] = students[i.y][i.x];
+            for (GridIterator.Pair p : new GridIterator<GridIterator.Pair>(GridIterator.IterType.FULL_GRID))
+                saved[p.y()][p.x()] = students[p.y()][p.x()];
         } catch (IllegalAccessException ignored) {
         }
     }

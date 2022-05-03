@@ -60,7 +60,7 @@ public class SimpleAlert implements Alert {
         Scene scene = new Scene(anchorPane);
         alertStage.setScene(scene);
         alertStage.setAlwaysOnTop(true);
-        alertStage.setOnCloseRequest(event -> ctrler.unlockMainWindow());
+        alertStage.setOnCloseRequest(event -> ctrler.unlockWindow());
     }
 
     public void setEventHandler(EventHandler<ActionEvent> okHandler, EventHandler<ActionEvent> cancelHandler) {

@@ -29,6 +29,7 @@ public final class LocalURL {
     public static final String FOLDER_ICON = RES_PATH + "folder.png";
     public static final String INTRODUCTION = RES_PATH + "introduction.png";
 
+    public static final String STU_INFO = WORK_PATH + "student.info";
 
     static {
         String jarPath;

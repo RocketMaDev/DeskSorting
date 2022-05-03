@@ -4,14 +4,16 @@
 
 package cn.rocket.deksrt.core;
 
+
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * @author Rocket
  * @version 0.9-pre
  * @see ArrayList
  */
-public class StudentList {
+public class StudentList<T> implements Iterable<T> {
     private final Student[] data;
     private int size = 0;
     private boolean searching = false;
@@ -73,5 +75,29 @@ public class StudentList {
                 }
         }
         return null;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public class Itr implements Iterator<T> {
+        private int index = 0;
+
+        @Override
+        public boolean hasNext() {
+            return index != size;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public T next() {
+            return (T) data[index++];
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new Itr();
     }
 }

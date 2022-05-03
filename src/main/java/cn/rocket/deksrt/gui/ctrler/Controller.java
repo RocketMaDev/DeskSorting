@@ -5,4 +5,7 @@
 package cn.rocket.deksrt.gui.ctrler;
 
 public interface Controller {
+   void lockWindow();
+
+   void unlockWindow();
 }
