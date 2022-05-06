@@ -263,7 +263,7 @@ public class MainController implements Controller {
     }
 
     @FXML
-    void mslM() {
+    void fastSortM() {
         if (saved == null)
             return;
         Student[][] shadow = new Student[7][10];
@@ -342,7 +342,7 @@ public class MainController implements Controller {
      *
      * @param out the BufferedOutputStream to be written
      * @throws IOException            if <code>out</code> can not be written
-     * @throws InvalidFormatException NEVER HAPPENS unless you delete <code>templateOfTable.xlsx</code>
+     * @throws InvalidFormatException NEVER HAPPENS unless you delete <code>table.xlsx</code>
      */
     void exportTable(BufferedOutputStream out) throws IOException, InvalidFormatException {
         if (saved == null)
@@ -369,7 +369,7 @@ public class MainController implements Controller {
         }
         table.getRow(8).getCell(0).setCellValue(headInfo.getText());
         Calendar c = Calendar.getInstance();
-        String date = c.get(Calendar.YEAR) + Util.MONTH_NAME[c.get(Calendar.MONTH)] + c.get(Calendar.DAY_OF_MONTH);
+        String date = c.get(Calendar.YEAR) + Util.MONTH_NAME[c.get(Calendar.MONTH)] + c.get(Calendar.DAY_OF_MONTH);//TODO Simple?来处理日期
         wb.setSheetName(0, date);
         wb.write(out);
         out.close();
@@ -423,7 +423,7 @@ public class MainController implements Controller {
             cell.setCellValue(stu.getName());
             styleproperties.put(CellUtil.FONT, stu.isLongName() ? font17.getIndex() : font20.getIndex());
             styleproperties.put(CellUtil.FILL_FOREGROUND_COLOR, stu.isBoarding() ?
-                    IndexedColors.PALE_BLUE.getIndex() :
+                    IndexedColors.PALE_BLUE.getIndex() ://TODO color to switch
                     IndexedColors.LIGHT_GREEN.getIndex());
         }
         styleproperties.put(CellUtil.FILL_PATTERN, FillPatternType.SOLID_FOREGROUND);

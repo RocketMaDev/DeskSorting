@@ -5,6 +5,8 @@
 package cn.rocket.deksrt.gui;
 
 import cn.rocket.deksrt.core.GlobalVariables;
+import cn.rocket.deksrt.gui.alert.Alert;
+import cn.rocket.deksrt.gui.ctrler.Controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
@@ -22,7 +24,7 @@ import java.io.*;
  * @author Rocket
  * @version 0.9-pre
  */
-public class IEportDialog {
+public class FileAlert implements Alert, Controller {
     private static boolean isFileChooserCreated = false;
     @FXML
     JFXButton iBtnCancel;
@@ -98,5 +100,15 @@ public class IEportDialog {
     void detectEnter(KeyEvent keyEvent) throws IOException, InvalidFormatException, IllegalAccessException {
         if (keyEvent.getCode().equals(KeyCode.ENTER))
             okM();
+    }
+
+    @Override
+    public void lockWindow() {
+
+    }
+
+    @Override
+    public void unlockWindow() {
+
     }
 }

@@ -16,18 +16,18 @@ public final class LocalURL {
     // User associated
     public static final String USER_PATH = System.getProperty("user.home") + "/"; // with /
     public static final String FOLDER_PATH = USER_PATH + ".rocketdev/";
-    public static final String WORK_PATH = FOLDER_PATH + "AssignMark/";
+    public static final String WORK_PATH = FOLDER_PATH + "DeskSorting/";
 
     // Jar associated
     public static final String JAR_PATH; // with /
     public static final String JAR_PARENT_PATH; // with /
 
-    public static final String RES_PATH = "/cn/rocket/deksrt/resource/";
-    public static final String STU_INFO_TEMPLATE_P = RES_PATH + "templateOfStuInfo.xlsx";
-    public static final String TABLE_TEMPLATE_P = RES_PATH + "templateOfTable.xlsx";
+    public static final String RES_PATH = "/assets/deksrt/";
+    public static final String STU_INFO_TEMPLATE_P = RES_PATH + "stuInfo.xlsx";
+    public static final String TABLE_TEMPLATE_P = RES_PATH + "table.xlsx";
     public static final String MAIN_WINDOW_FXML = RES_PATH + "MainWindow.fxml";
     public static final String FOLDER_ICON = RES_PATH + "folder.png";
-    public static final String INTRODUCTION = RES_PATH + "introduction.png";
+    public static final String INTRO = RES_PATH + "intro.png";
 
     public static final String STU_INFO = WORK_PATH + "student.info";
 

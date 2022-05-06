@@ -96,6 +96,7 @@ public class GridIterator<T> implements Iterable<T> {
         return pos;
     }
 
+    //TODO safe concern
     public int[] toArray() {
         return content;
     }

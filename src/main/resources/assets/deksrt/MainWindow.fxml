@@ -65,7 +65,8 @@
             <Font size="15.0"/>
         </font>
     </JFXButton>
-    <JFXButton fx:id="MSLSort" buttonType="RAISED" layoutX="702.0" layoutY="20.0" onAction="#mslM" prefHeight="64.0"
+    <JFXButton fx:id="MSLSort" buttonType="RAISED" layoutX="702.0" layoutY="20.0" onAction="#fastSortM"
+               prefHeight="64.0"
                prefWidth="128.0" ripplerFill="BLACK" stylesheets="@style.css" text="世龙排">
         <font>
             <Font size="15.0"/>

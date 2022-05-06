@@ -27,6 +27,7 @@ public class Student {
     @Override
     public String toString() {
         return "<" + name + "," + pinyin + "," + boarding + "," + (longName ? "long" : "short") + ">";
+        //TODO StringJoiner(还有输入/出名单) Hashcode
     }
 
     public Student(String name, String pinyin, boolean boarding) {

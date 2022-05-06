@@ -40,7 +40,7 @@ public class FileAccess {
         AnchorPane.setTopAnchor(btn, 100.0);
         AnchorPane.setRightAnchor(btn, 100.0);
         pane.setPrefSize(970, 700);
-        pane.getChildren().addAll(new ImageView(new Image(LocalURL.INTRODUCTION)), btn);
+        pane.getChildren().addAll(new ImageView(new Image(LocalURL.INTRO)), btn);
         primaryStage.setScene(new Scene(pane));
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.show();
