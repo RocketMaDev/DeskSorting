@@ -5,17 +5,6 @@
 package cn.rocket.deksrt.gui;
 
 import cn.rocket.deksrt.core.*;
-import com.jfoenix.controls.JFXButton;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.paint.Paint;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
@@ -29,22 +18,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 public class FileAccess {
-    public static void showIntroduction(Stage primaryStage) {
-        JFXButton btn = new JFXButton("关闭");
-        btn.setButtonType(JFXButton.ButtonType.RAISED);
-        btn.setTextFill(Paint.valueOf("white"));
-        btn.setFont(Font.font(25));
-        btn.setOnAction(event -> primaryStage.close());
-        btn.setBackground(new Background(new BackgroundFill(Paint.valueOf("dodgerblue"), null, null)));
-        AnchorPane pane = new AnchorPane();
-        AnchorPane.setTopAnchor(btn, 100.0);
-        AnchorPane.setRightAnchor(btn, 100.0);
-        pane.setPrefSize(970, 700);
-        pane.getChildren().addAll(new ImageView(new Image(LocalURL.INTRO)), btn);
-        primaryStage.setScene(new Scene(pane));
-        primaryStage.initStyle(StageStyle.UNDECORATED);
-        primaryStage.show();
-    }
 
     /**
      * <b>EXIT CODE 99, 100 HERE</b>
@@ -145,6 +118,7 @@ public class FileAccess {
         }
     }
 
+    //TODO StringJoiner(还有输入/出名单)
     /**
      * @return <code>false</code> if no info in "student.info" or the file doesn't exist.
      */

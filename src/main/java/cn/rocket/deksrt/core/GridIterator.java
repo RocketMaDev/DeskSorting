@@ -18,7 +18,7 @@ public class GridIterator<T> implements Iterable<T> {
     private int pos;
     private final int[] content;
 
-    public class Itr implements Iterator<T> {
+    private class Itr implements Iterator<T> {
         private int index = 0;
 
         @Override
@@ -96,9 +96,19 @@ public class GridIterator<T> implements Iterable<T> {
         return pos;
     }
 
-    //TODO safe concern
-    public int[] toArray() {
-        return content;
+    /**
+     * NOTE: 如果{@code unsafe}为{@code true}，那么将返回对象中的引用，造成性能问题
+     *
+     * @return 返回网格int数组内容
+     */
+    public int[] toArray(boolean unsafe) {
+        if (unsafe)
+            return content;
+        else {
+            int[] res = new int[content.length];
+            System.arraycopy(content, 0, res, 0, res.length);
+            return res;
+        }
     }
 
     @Override

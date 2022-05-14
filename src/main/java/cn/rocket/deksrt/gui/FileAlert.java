@@ -4,9 +4,11 @@
 
 package cn.rocket.deksrt.gui;
 
-import cn.rocket.deksrt.core.GlobalVariables;
+import cn.rocket.deksrt.core.LocalURL;
+import cn.rocket.deksrt.core.Vars;
 import cn.rocket.deksrt.gui.alert.Alert;
 import cn.rocket.deksrt.gui.ctrler.Controller;
+import cn.rocket.deksrt.gui.ctrler.MainController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
@@ -42,18 +44,18 @@ public class FileAlert implements Alert, Controller {
     void initialize() {
         iodTxtF.setText("");
         iconBtn.setText("");
-        iconBtn.setGraphic(new ImageView(new Image(GlobalVariables.FOLDER_ICON)));
+        iconBtn.setGraphic(new ImageView(new Image(LocalURL.FOLDER_ICON)));
     }
 
     @FXML
     void okM() throws IOException, IllegalAccessException, InvalidFormatException {
         String address = iodTxtF.getText();
         if (address.lastIndexOf(".xlsx") == address.length() - ".xlsx".length())
-            switch (GlobalVariables.iodS.getTitle()) {
+            switch (Vars.stageMap.get(FileAccess.class).getTitle()) {
                 case "导入":
                     File importFile = new File(address);
                     if (importFile.exists())
-                        GlobalVariables.mwObj.impl_importTable(new BufferedInputStream(new FileInputStream(address)));
+                        ((MainController) Vars.objMap.get(MainController.class)).impl_importTable(new BufferedInputStream(new FileInputStream(address)));
                     else
                         throw new IOException("The file to import does NOT exist!");
                     break;
@@ -65,15 +67,15 @@ public class FileAlert implements Alert, Controller {
                         //noinspection ResultOfMethodCallIgnored
                         exportFile.createNewFile();
                     }
-                    GlobalVariables.mwObj.exportTable(new BufferedOutputStream(new FileOutputStream(address)));
+                    ((MainController) Vars.objMap.get(MainController.class)).exportTable(new BufferedOutputStream(new FileOutputStream(address)));
             }
-        GlobalVariables.iodS.close();
+        Vars.stageMap.get(FileAccess.class).close();
     }
 
     @FXML
     void cancelM() {
-        GlobalVariables.mwObj.unlockMainWindow();
-        GlobalVariables.iodS.close();
+        ((MainController) Vars.objMap.get(MainController.class)).unlockMainWindow();
+        Vars.stageMap.get(FileAccess.class).close();
     }
 
     @FXML
@@ -87,10 +89,10 @@ public class FileAlert implements Alert, Controller {
                 new FileChooser.ExtensionFilter("New Excel File", "*.xlsx")
         );
         File selected;
-        if (GlobalVariables.iodS.getTitle().equals("导入"))
-            selected = fc.showOpenDialog(GlobalVariables.iodS);
+        if (Vars.stageMap.get(FileAccess.class).getTitle().equals("导入"))
+            selected = fc.showOpenDialog(Vars.stageMap.get(FileAccess.class));
         else
-            selected = fc.showSaveDialog(GlobalVariables.iodS);
+            selected = fc.showSaveDialog(Vars.stageMap.get(FileAlert.class));
         isFileChooserCreated = false;
         iodTxtF.setText(selected != null ? selected.getAbsolutePath() : "");
         iodTxtF.appendText("");

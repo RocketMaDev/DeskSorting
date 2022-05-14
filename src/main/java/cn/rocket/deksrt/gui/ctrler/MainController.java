@@ -5,6 +5,9 @@
 package cn.rocket.deksrt.gui.ctrler;
 
 import cn.rocket.deksrt.core.*;
+import cn.rocket.deksrt.core.GridIterator.IterType;
+import cn.rocket.deksrt.core.GridIterator.Pair;
+import cn.rocket.deksrt.gui.FileAlert;
 import cn.rocket.deksrt.gui.alert.SimpleAlert;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -35,6 +38,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -45,6 +49,9 @@ public class MainController implements Controller {
     private Stage iodS;
     private Parent iod;
 
+    private JFXButton[][] btns;
+    private JFXTextField[][] textfields;
+    private Student[][] students;
     private Student[][] saved;
     private int index;
     private static final Font SIZE18 = new Font(18);
@@ -123,7 +130,7 @@ public class MainController implements Controller {
 
     @FXML
     void initialize() throws IllegalAccessException {
-        GlobalVariables.mwObj = this;
+        Vars.objMap.put(MainController.class, this);
         iod = null;
         try {
             iod = FXMLLoader.load(Objects.requireNonNull(
@@ -133,7 +140,7 @@ public class MainController implements Controller {
             e.printStackTrace();
         }
         iodS = new Stage();
-        GlobalVariables.iodS = iodS;
+        Vars.stageMap.put(FileAlert.class, iodS);
         iodS.setResizable(false);
         iodS.setScene(new Scene(Objects.requireNonNull(iod)));
         iodS.setAlwaysOnTop(true);
@@ -143,27 +150,27 @@ public class MainController implements Controller {
         btns = new JFXButton[7][8];
         textfields = new JFXTextField[7][8];
 
-        for (GridIterator i = new GridIterator(GridIterator.SQUARE_ARRAY); i.hasNextWithUpdate(); i.next()) {
+        for (Pair p : new GridIterator<Pair>(IterType.FULL_GRID)) {
             JFXButton btn = new JFXButton();
-            btns[i.y][i.x] = btn;
+            btns[p.y()][p.x()] = btn;
             btn.setPrefSize(100, 60);
-            btn.setOnAction(new ButtonEventHandler<>(i.x, i.y));
+            btn.setOnAction(new ButtonEventHandler<>(p.x(), p.y()));
             btn.setFont(SIZE18);
 
             JFXTextField textField = new JFXTextField();
-            textfields[i.y][i.x] = textField;
+            textfields[p.y()][p.x()] = textField;
             textField.setFont(SIZE18);
             textField.setVisible(false);
             textField.setDisable(true);
         }
-        for (GridIterator i = new GridIterator(GridIterator.GRID0); i.hasNextWithUpdate(); i.next()) {
-            grid0.add(btns[i.y][i.x], i.x, i.y);
-            grid0.add(textfields[i.y][i.x], i.x, i.y);
+        for (Pair p : new GridIterator<Pair>(IterType.GRID0)) {
+            grid0.add(btns[p.y()][p.x()], p.x(), p.y());
+            grid0.add(textfields[p.y()][p.x()], p.x(), p.y());
         }
-        for (GridIterator i = new GridIterator(GridIterator.GRID1); i.hasNextWithUpdate(); i.next()) {
-            int col = i.x < 3 ? i.x + 1 : i.x + 2;
-            grid1.add(btns[6][col], i.x, i.y);
-            grid1.add(textfields[6][col], i.x, i.y);
+        for (Pair p : new GridIterator<Pair>(IterType.GRID1)) {
+            int col = p.x() < 3 ? p.x() + 1 : p.x() + 2;
+            grid1.add(btns[6][col], p.x(), p.y());
+            grid1.add(textfields[6][col], p.x(), p.y());
         }
 
     }
@@ -191,9 +198,9 @@ public class MainController implements Controller {
     /**
      * @see MainController#importTable(BufferedInputStream)
      */
-    void impl_importTable(BufferedInputStream in) throws IOException, IllegalAccessException {
+    public void impl_importTable(BufferedInputStream in) throws IOException, IllegalAccessException {
         if (saved != null) {
-            SimpleAlert alert = new SimpleAlert(GlobalVariables.GIVE_UP_LAYOUT_WARNING);
+            SimpleAlert alert = new SimpleAlert(Vars.GIVE_UP_LAYOUT_WARNING, false, this);
             alert.setEventHandler(event -> {
                 try {
                     importTable(in);
@@ -223,8 +230,8 @@ public class MainController implements Controller {
     }
 
     private void randomSort() {
-        LinkedList<Student> stus = new LinkedList<>(Vars.stuInfo);//TODO 用fori逐个添加
-        int[] t0 = new GridIterator(GridIterator.SQUARE_ARRAY).toArray();
+        LinkedList<Student> stus = new LinkedList<>(Vars.stuInfo.toCollection());
+        int[] t0 = new GridIterator<Pair>(IterType.FULL_GRID).toArray(true);
         Integer[] t1 = new Integer[t0.length];
         for (int i = 0; i < t0.length; i++)
             t1[i] = t0[i];
@@ -249,7 +256,7 @@ public class MainController implements Controller {
             randomSort();
         else {
             lockMainWindow();
-            SimpleAlert alert = new SimpleAlert(GlobalVariables.GIVE_UP_LAYOUT_WARNING);
+            SimpleAlert alert = new SimpleAlert(Vars.GIVE_UP_LAYOUT_WARNING, true, this);
             alert.setEventHandler(event -> {
                 randomSort();
                 unlockMainWindow();
@@ -344,10 +351,10 @@ public class MainController implements Controller {
      * @throws IOException            if <code>out</code> can not be written
      * @throws InvalidFormatException NEVER HAPPENS unless you delete <code>table.xlsx</code>
      */
-    void exportTable(BufferedOutputStream out) throws IOException, InvalidFormatException {
+    public void exportTable(BufferedOutputStream out) throws IOException, InvalidFormatException {
         if (saved == null)
             return;
-        InputStream in = MainController.class.getResourceAsStream(GlobalVariables.TABLE_TEMPLATE_P);
+        InputStream in = MainController.class.getResourceAsStream(LocalURL.TABLE_TEMPLATE_P);
         assert in != null;
         OPCPackage pkg = OPCPackage.open(in);
         XSSFWorkbook wb = new XSSFWorkbook(pkg);
@@ -368,8 +375,7 @@ public class MainController implements Controller {
                     r.getCell(frontColumns[col], Row.MissingCellPolicy.RETURN_NULL_AND_BLANK));
         }
         table.getRow(8).getCell(0).setCellValue(headInfo.getText());
-        Calendar c = Calendar.getInstance();
-        String date = c.get(Calendar.YEAR) + Util.MONTH_NAME[c.get(Calendar.MONTH)] + c.get(Calendar.DAY_OF_MONTH);//TODO Simple?来处理日期
+        String date = LocalDate.now().toString();
         wb.setSheetName(0, date);
         wb.write(out);
         out.close();
@@ -440,20 +446,17 @@ public class MainController implements Controller {
     private void syncSaved(boolean withInit) {
         if (withInit && saved == null)
             saved = new Student[7][8];
-        try {
-            for (GridIterator.Pair p : new GridIterator<GridIterator.Pair>(GridIterator.IterType.FULL_GRID))
-                saved[p.y()][p.x()] = students[p.y()][p.x()];
-        } catch (IllegalAccessException ignored) {
-        }
+        for (Pair p : new GridIterator<Pair>(IterType.FULL_GRID))
+            saved[p.y()][p.x()] = students[p.y()][p.x()];
     }
 
     private void lockMainWindow() {
-        GlobalVariables.mainS.setOnCloseRequest(Event::consume);
+        Vars.stageMap.get(MainController.class).setOnCloseRequest(Event::consume);
         anchorPane.setDisable(true);
     }
 
-    void unlockMainWindow() {
-        GlobalVariables.mainS.setOnCloseRequest(event -> {
+    public void unlockMainWindow() {
+        Vars.stageMap.get(MainController.class).setOnCloseRequest(event -> {
         });
         anchorPane.setDisable(false);
     }
@@ -490,11 +493,8 @@ public class MainController implements Controller {
      * Update the whole table.
      */
     private void updateTable() {
-        try {
-            for (GridIterator i = new GridIterator(GridIterator.SQUARE_ARRAY); i.hasNextWithUpdate(); i.next())
-                updateTable(i.x, i.y);
-        } catch (IllegalAccessException ignored) {
-        }
+        for (Pair p : new GridIterator<Pair>(IterType.FULL_GRID))
+            updateTable(p.x(), p.y());
     }
 
     @FXML

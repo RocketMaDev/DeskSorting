@@ -19,7 +19,7 @@ public class Vars {
     public static StudentList<Student> stuInfo;
 
 
-    static final String GIVE_UP_LAYOUT_WARNING = "是否放弃当前布局？";
+    public static final String GIVE_UP_LAYOUT_WARNING = "是否放弃当前布局？";
 
 
 }

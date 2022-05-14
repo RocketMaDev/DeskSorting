@@ -4,7 +4,12 @@
 
 package cn.rocket.deksrt.core;
 
+import java.util.Objects;
+import java.util.StringJoiner;
+
 /**
+ * 不可修改的对象
+ *
  * @author Rocket
  * @version 0.9-pre
  */
@@ -26,8 +31,9 @@ public class Student {
 
     @Override
     public String toString() {
-        return "<" + name + "," + pinyin + "," + boarding + "," + (longName ? "long" : "short") + ">";
-        //TODO StringJoiner(还有输入/出名单) Hashcode
+        StringJoiner joiner = new StringJoiner(", ", "<", ">");
+        joiner.add(name).add(pinyin).add(Boolean.toString(boarding)).add(longName ? "long" : "short");
+        return joiner.toString();
     }
 
     public Student(String name, String pinyin, boolean boarding) {
@@ -35,6 +41,11 @@ public class Student {
         this.pinyin = pinyin;
         this.boarding = boarding;
         this.longName = name.length() > 4;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
     public String getName() {

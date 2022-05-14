@@ -6,6 +6,8 @@ package cn.rocket.deksrt.core;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -81,7 +83,7 @@ public class StudentList<T> implements Iterable<T> {
         return size;
     }
 
-    public class Itr implements Iterator<T> {
+    private class Itr implements Iterator<T> {
         private int index = 0;
 
         @Override
@@ -99,5 +101,10 @@ public class StudentList<T> implements Iterable<T> {
     @Override
     public Iterator<T> iterator() {
         return new Itr();
+    }
+
+    @SuppressWarnings("unchecked")
+    public Collection<T> toCollection() {
+        return (Collection<T>) Arrays.asList(data);
     }
 }
