@@ -7,7 +7,7 @@ package cn.rocket.deksrt.gui.ctrler;
 import cn.rocket.deksrt.core.*;
 import cn.rocket.deksrt.core.GridIterator.IterType;
 import cn.rocket.deksrt.core.GridIterator.Pair;
-import cn.rocket.deksrt.gui.FileAlert;
+import cn.rocket.deksrt.gui.alert.FileAlert;
 import cn.rocket.deksrt.gui.alert.SimpleAlert;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -46,6 +46,16 @@ import java.util.*;
  * @version 0.9-pre
  */
 public class MainController implements Controller {
+    private MainController(boolean empty) {
+        if (empty)
+            iod = null;
+    }
+
+    public MainController() {
+        this(false);
+    }
+
+    public static final MainController TYPE = new MainController(true);
     private Stage iodS;
     private Parent iod;
 
@@ -130,7 +140,7 @@ public class MainController implements Controller {
 
     @FXML
     void initialize() throws IllegalAccessException {
-        Vars.objMap.put(MainController.class, this);
+        Vars.putObj(this);
         iod = null;
         try {
             iod = FXMLLoader.load(Objects.requireNonNull(
@@ -140,7 +150,7 @@ public class MainController implements Controller {
             e.printStackTrace();
         }
         iodS = new Stage();
-        Vars.stageMap.put(FileAlert.class, iodS);
+        Vars.putStage(FileAlert.class, iodS);
         iodS.setResizable(false);
         iodS.setScene(new Scene(Objects.requireNonNull(iod)));
         iodS.setAlwaysOnTop(true);
@@ -451,12 +461,12 @@ public class MainController implements Controller {
     }
 
     private void lockMainWindow() {
-        Vars.stageMap.get(MainController.class).setOnCloseRequest(Event::consume);
+        Vars.getStage(MainController.class).setOnCloseRequest(Event::consume);
         anchorPane.setDisable(true);
     }
 
     public void unlockMainWindow() {
-        Vars.stageMap.get(MainController.class).setOnCloseRequest(event -> {
+        Vars.getStage(MainController.class).setOnCloseRequest(event -> {
         });
         anchorPane.setDisable(false);
     }

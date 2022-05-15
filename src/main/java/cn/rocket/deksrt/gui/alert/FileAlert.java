@@ -2,11 +2,11 @@
  * Copyright (c) 2022 Rocket, Project DeskSorting
  */
 
-package cn.rocket.deksrt.gui;
+package cn.rocket.deksrt.gui.alert;
 
 import cn.rocket.deksrt.core.LocalURL;
 import cn.rocket.deksrt.core.Vars;
-import cn.rocket.deksrt.gui.alert.Alert;
+import cn.rocket.deksrt.gui.FileAccess;
 import cn.rocket.deksrt.gui.ctrler.Controller;
 import cn.rocket.deksrt.gui.ctrler.MainController;
 import com.jfoenix.controls.JFXButton;
@@ -55,7 +55,7 @@ public class FileAlert implements Alert, Controller {
                 case "导入":
                     File importFile = new File(address);
                     if (importFile.exists())
-                        ((MainController) Vars.objMap.get(MainController.class)).impl_importTable(new BufferedInputStream(new FileInputStream(address)));
+                        Vars.getObj(MainController.TYPE).impl_importTable(new BufferedInputStream(new FileInputStream(address)));
                     else
                         throw new IOException("The file to import does NOT exist!");
                     break;
@@ -67,7 +67,7 @@ public class FileAlert implements Alert, Controller {
                         //noinspection ResultOfMethodCallIgnored
                         exportFile.createNewFile();
                     }
-                    ((MainController) Vars.objMap.get(MainController.class)).exportTable(new BufferedOutputStream(new FileOutputStream(address)));
+                    Vars.getObj(MainController.TYPE).exportTable(new BufferedOutputStream(new FileOutputStream(address)));
             }
         Vars.stageMap.get(FileAccess.class).close();
     }

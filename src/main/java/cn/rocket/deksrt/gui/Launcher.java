@@ -22,7 +22,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.io.File;
 import java.net.URL;
 
 /**
@@ -30,9 +29,13 @@ import java.net.URL;
  * @version 1.0
  */
 public class Launcher extends Application {
+    public static void launchSelf() {
+        Application.launch(Launcher.class);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Vars.stageMap.put(MainController.class, primaryStage);
+        Vars.putStage(MainController.class, primaryStage);
 //        File propertiesFile = new File(GlobalVariables.env+"config.properties");
         if (!FileAccess.importStuInfo()) {
             String errors = FileAccess.scanStuInfo();
@@ -71,21 +74,7 @@ public class Launcher extends Application {
     }
 
 
-    /**
-     * The main entrance of the program.
-     *
-     * @param args [0]:--reset?delete student.info
-     */
     public static void main(String[] args) {
-        // 重置 参数
-        if (args.length != 0 && args[0].equals("--reset")) {
-            File stuInfoFile = new File(LocalURL.STU_INFO);
-            if (stuInfoFile.exists())
-                //noinspection ResultOfMethodCallIgnored
-                stuInfoFile.delete();
-            System.exit(0);
-        }
-
         launch(args);
     }
 }
