@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2021 Rocket, Project DeskSorting
+ * Copyright (c) 2022 Rocket, Project DeskSorting
  */
 
-package cn.rocket.deksrt.core;
+package cn.rocket.deksrt.core.student;
 
 import java.util.Objects;
 import java.util.StringJoiner;

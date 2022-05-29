@@ -4,7 +4,11 @@
 
 package cn.rocket.deksrt.gui;
 
-import cn.rocket.deksrt.core.*;
+import cn.rocket.deksrt.core.LocalURL;
+import cn.rocket.deksrt.core.Util;
+import cn.rocket.deksrt.core.Vars;
+import cn.rocket.deksrt.core.student.Student;
+import cn.rocket.deksrt.core.student.StudentList;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;

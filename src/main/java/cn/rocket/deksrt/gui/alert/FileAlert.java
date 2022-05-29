@@ -11,13 +11,16 @@ import cn.rocket.deksrt.gui.ctrler.Controller;
 import cn.rocket.deksrt.gui.ctrler.MainController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import javafx.fxml.FXML;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import java.io.*;
@@ -27,28 +30,44 @@ import java.io.*;
  * @version 0.9-pre
  */
 public class FileAlert implements Alert, Controller {
-    private static boolean isFileChooserCreated = false;
-    @FXML
-    JFXButton iBtnCancel;
-    @FXML
-    Label iLal;
-    @FXML
-    JFXTextField iodTxtF;
-    @FXML
-    JFXButton iconBtn;
-    @FXML
-    JFXButton iBtnOK;
+    private static final double GAP = 25;
+    private JFXButton cancel = new JFXButton("取消");
+    private Label label = new Label();
+    private JFXTextField field = new JFXTextField();
+    private JFXButton open = new JFXButton();
+    private JFXButton ok = new JFXButton("确定");
+    private AnchorPane pane = new AnchorPane();
+    private Stage stage;
 
+    public FileAlert(Controller ctrler, EventHandler<Event> okHandler, EventHandler<Event> cancelHandler) {
+        pane.setPrefSize(164, 480);
 
-    @FXML
-    void initialize() {
+        AnchorPane.setTopAnchor(label, GAP);
+        AnchorPane.setLeftAnchor(label, GAP);
+
+        AnchorPane.setBottomAnchor(ok, GAP);
+        AnchorPane.setRightAnchor(ok, GAP);
+        ok.setDefaultButton(true);
+
+        AnchorPane.setBottomAnchor(cancel, GAP);
+
+        AnchorPane.setRightAnchor(open, GAP);
+        AnchorPane.setTopAnchor(open, GAP);
+        open.setPrefSize(32.0, 32.0);
+
+        open.setOnKeyTyped(event -> {
+            if (event.getCode() == KeyCode.ENTER)
+                ok.fire();
+        });
+    }
+
+    public void initialize() {
         iodTxtF.setText("");
         iconBtn.setText("");
         iconBtn.setGraphic(new ImageView(new Image(LocalURL.FOLDER_ICON)));
     }
 
-    @FXML
-    void okM() throws IOException, IllegalAccessException, InvalidFormatException {
+    public void okM() throws IOException, IllegalAccessException, InvalidFormatException {
         String address = iodTxtF.getText();
         if (address.lastIndexOf(".xlsx") == address.length() - ".xlsx".length())
             switch (Vars.stageMap.get(FileAccess.class).getTitle()) {
@@ -72,14 +91,12 @@ public class FileAlert implements Alert, Controller {
         Vars.stageMap.get(FileAccess.class).close();
     }
 
-    @FXML
-    void cancelM() {
+    public void cancelM() {
         ((MainController) Vars.objMap.get(MainController.class)).unlockMainWindow();
         Vars.stageMap.get(FileAccess.class).close();
     }
 
-    @FXML
-    void fileChooserLinker() {
+    public void fileChooserLinker() {
         if (isFileChooserCreated)
             return;
         isFileChooserCreated = true;
@@ -98,8 +115,7 @@ public class FileAlert implements Alert, Controller {
         iodTxtF.appendText("");
     }
 
-    @FXML
-    void detectEnter(KeyEvent keyEvent) throws IOException, InvalidFormatException, IllegalAccessException {
+    public void detectEnter(KeyEvent keyEvent) throws IOException, InvalidFormatException, IllegalAccessException {
         if (keyEvent.getCode().equals(KeyCode.ENTER))
             okM();
     }

@@ -4,6 +4,8 @@
 
 package cn.rocket.deksrt.core;
 
+import cn.rocket.deksrt.core.student.Student;
+
 public interface SeatForm {
     int MAX_X = 8;
     int MAY_Y = 7;

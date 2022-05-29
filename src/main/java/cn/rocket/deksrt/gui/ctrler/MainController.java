@@ -4,9 +4,14 @@
 
 package cn.rocket.deksrt.gui.ctrler;
 
-import cn.rocket.deksrt.core.*;
-import cn.rocket.deksrt.core.GridIterator.IterType;
-import cn.rocket.deksrt.core.GridIterator.Pair;
+import cn.rocket.deksrt.core.LocalURL;
+import cn.rocket.deksrt.core.Util;
+import cn.rocket.deksrt.core.Vars;
+import cn.rocket.deksrt.core.iterator.GridIterator;
+import cn.rocket.deksrt.core.iterator.IterType;
+import cn.rocket.deksrt.core.iterator.Pair;
+import cn.rocket.deksrt.core.student.Student;
+import cn.rocket.deksrt.core.student.StudentList;
 import cn.rocket.deksrt.gui.alert.FileAlert;
 import cn.rocket.deksrt.gui.alert.SimpleAlert;
 import com.jfoenix.controls.JFXButton;
@@ -139,7 +144,7 @@ public class MainController implements Controller {
     }
 
     @FXML
-    void initialize() throws IllegalAccessException {
+    void initialize() {
         Vars.putObj(this);
         iod = null;
         try {
@@ -160,7 +165,7 @@ public class MainController implements Controller {
         btns = new JFXButton[7][8];
         textfields = new JFXTextField[7][8];
 
-        for (Pair p : new GridIterator<Pair>(IterType.FULL_GRID)) {
+        for (Pair p : GridIterator.FULL_GRID) {
             JFXButton btn = new JFXButton();
             btns[p.y()][p.x()] = btn;
             btn.setPrefSize(100, 60);
@@ -173,11 +178,11 @@ public class MainController implements Controller {
             textField.setVisible(false);
             textField.setDisable(true);
         }
-        for (Pair p : new GridIterator<Pair>(IterType.GRID0)) {
+        for (Pair p : GridIterator.GRID0) {
             grid0.add(btns[p.y()][p.x()], p.x(), p.y());
             grid0.add(textfields[p.y()][p.x()], p.x(), p.y());
         }
-        for (Pair p : new GridIterator<Pair>(IterType.GRID1)) {
+        for (Pair p : GridIterator.GRID1) {
             int col = p.x() < 3 ? p.x() + 1 : p.x() + 2;
             grid1.add(btns[6][col], p.x(), p.y());
             grid1.add(textfields[6][col], p.x(), p.y());
@@ -240,8 +245,8 @@ public class MainController implements Controller {
     }
 
     private void randomSort() {
-        LinkedList<Student> stus = new LinkedList<>(Vars.stuInfo.toCollection());
-        int[] t0 = new GridIterator<Pair>(IterType.FULL_GRID).toArray(true);
+        LinkedList<Student> stus = new LinkedList<>(Vars.stuInfo);
+        int[] t0 = new GridIterator<>(IterType.FULL_GRID).toArray(true);
         Integer[] t1 = new Integer[t0.length];
         for (int i = 0; i < t0.length; i++)
             t1[i] = t0[i];
@@ -355,7 +360,7 @@ public class MainController implements Controller {
     }
 
     /**
-     * Export the present table through an given BufferedOutputStream
+     * Export the present table through the given BufferedOutputStream
      *
      * @param out the BufferedOutputStream to be written
      * @throws IOException            if <code>out</code> can not be written
@@ -456,7 +461,7 @@ public class MainController implements Controller {
     private void syncSaved(boolean withInit) {
         if (withInit && saved == null)
             saved = new Student[7][8];
-        for (Pair p : new GridIterator<Pair>(IterType.FULL_GRID))
+        for (Pair p : GridIterator.FULL_GRID)
             saved[p.y()][p.x()] = students[p.y()][p.x()];
     }
 
@@ -503,7 +508,7 @@ public class MainController implements Controller {
      * Update the whole table.
      */
     private void updateTable() {
-        for (Pair p : new GridIterator<Pair>(IterType.FULL_GRID))
+        for (Pair p : GridIterator.FULL_GRID)
             updateTable(p.x(), p.y());
     }
 

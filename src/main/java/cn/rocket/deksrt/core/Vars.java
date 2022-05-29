@@ -4,6 +4,8 @@
 
 package cn.rocket.deksrt.core;
 
+import cn.rocket.deksrt.core.student.Student;
+import cn.rocket.deksrt.core.student.StudentList;
 import javafx.stage.Stage;
 
 import java.util.HashMap;

@@ -1,22 +1,23 @@
 /*
- * Copyright (c) 2021 Rocket, Project DeskSorting
+ * Copyright (c) 2022 Rocket, Project DeskSorting
  */
 
-package cn.rocket.deksrt.core;
+package cn.rocket.deksrt.core.iterator;
 
 import java.util.Iterator;
 
-import static cn.rocket.deksrt.core.Util.*;
+import static cn.rocket.deksrt.core.Util.store;
 
 /**
  * @author Rocket
  * @version 0.9-pre
  */
-public class GridIterator<T> implements Iterable<T> {
-    public int x;
-    public int y;
+public class GridIterator<T extends Pair> implements Iterable<T> {
     private int pos;
     private final int[] content;
+    public static final GridIterator<Pair> FULL_GRID = new GridIterator<>(IterType.FULL_GRID);
+    public static final GridIterator<Pair> GRID1 = new GridIterator<>(IterType.GRID1);
+    public static final GridIterator<Pair> GRID0 = new GridIterator<>(IterType.GRID0);
 
     private class Itr implements Iterator<T> {
         private int index = 0;
@@ -31,12 +32,6 @@ public class GridIterator<T> implements Iterable<T> {
         public T next() {
             return (T) new Pair(content[index++]);
         }
-    }
-
-    public enum IterType {
-        FULL_GRID,
-        GRID0,
-        GRID1
     }
 
     public GridIterator(IterType mode) {
@@ -72,23 +67,6 @@ public class GridIterator<T> implements Iterable<T> {
         pos = 0;
     }
 
-    public static class Pair {
-        private final int x;
-        private final int y;
-
-        public int x() {
-            return x;
-        }
-
-        public int y() {
-            return y;
-        }
-
-        public Pair(int xy) {
-            x = readX(xy);
-            y = readY(xy);
-        }
-    }
 
     public int getPos() {
         if (content.length != 4)

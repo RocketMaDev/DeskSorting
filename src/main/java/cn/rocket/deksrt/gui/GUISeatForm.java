@@ -5,7 +5,7 @@
 package cn.rocket.deksrt.gui;
 
 import cn.rocket.deksrt.core.SeatForm;
-import cn.rocket.deksrt.core.Student;
+import cn.rocket.deksrt.core.student.Student;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 
