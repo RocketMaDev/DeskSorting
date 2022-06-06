@@ -8,7 +8,6 @@ import cn.rocket.deksrt.core.LocalURL;
 import cn.rocket.deksrt.core.Util;
 import cn.rocket.deksrt.core.Vars;
 import cn.rocket.deksrt.core.iterator.GridIterator;
-import cn.rocket.deksrt.core.iterator.IterType;
 import cn.rocket.deksrt.core.iterator.Pair;
 import cn.rocket.deksrt.core.student.Student;
 import cn.rocket.deksrt.core.student.StudentList;
@@ -20,7 +19,6 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,7 +28,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.apache.poi.EmptyFileException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.exceptions.OLE2NotOfficeXmlFileException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellUtil;
@@ -45,6 +45,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static cn.rocket.deksrt.core.Util.*;
 
 /**
  * @author Rocket
@@ -69,40 +72,33 @@ public class MainController implements Controller {
     private Student[][] students;
     private Student[][] saved;
     private int index;
+    private final FileAlert fileAlert = new FileAlert(this, true);
     private static final Font SIZE18 = new Font(18);
     private static final Font SIZE15 = new Font(15);
 
-    @FXML
-    AnchorPane anchorPane;
-    @FXML
-    JFXButton copyright;
-    @FXML
-    JFXButton swapClass;
-    @FXML
-    JFXCheckBox quickSwapCB;
-    @FXML
-    JFXButton importB;
-    @FXML
-    JFXButton exportB;
-    @FXML
-    JFXButton randSort;
-    @FXML
-    JFXButton MSLSort;
-    @FXML
-    GridPane grid0;
-    @FXML
-    JFXTextField headInfo;
-    @FXML
-    GridPane grid1;
+    public AnchorPane anchorPane;
+    public JFXButton copyright;
+    public JFXButton swapClass;
+    public JFXCheckBox quickSwapCB;
+    public JFXButton importB;
+    public JFXButton exportB;
+    public JFXButton randSort;
+    public JFXButton MSLSort;
+    public GridPane grid0;
+    public JFXTextField headInfo;
+    public GridPane grid1;
 
     @Override
     public void lockWindow() {
-
+        anchorPane.setDisable(true);
+        Vars.getStage(MainController.class).setOnCloseRequest(Event::consume);
     }
 
     @Override
     public void unlockWindow() {
-
+        anchorPane.setDisable(false);
+        Vars.getStage(MainController.class).setOnCloseRequest(event -> {
+        });
     }
 
     /**
@@ -123,11 +119,11 @@ public class MainController implements Controller {
         public void handle(Event event) {
             if (quickSwapCB.isSelected())
                 if (index == -1) {
-                    index = x * 10 + y;
+                    index = store(x, y);
                     btns[y][x].setDisable(true);
                 } else {
-                    int x0 = index / 10;
-                    int y0 = index % 10;
+                    int x0 = readX(index);
+                    int y0 = readY(index);
                     index = -1;
                     Student t = students[y0][x0];
                     students[y0][x0] = students[y][x];
@@ -143,8 +139,7 @@ public class MainController implements Controller {
 
     }
 
-    @FXML
-    void initialize() {
+    public void initialize() {
         Vars.putObj(this);
         iod = null;
         try {
@@ -154,6 +149,7 @@ public class MainController implements Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        //TODO FileAlert处理
         iodS = new Stage();
         Vars.putStage(FileAlert.class, iodS);
         iodS.setResizable(false);
@@ -190,19 +186,16 @@ public class MainController implements Controller {
 
     }
 
-    @FXML
-    void swapClassM() {
+    public void swapClassM() {
         swapClass.setDisable(true);
     }
 
-    @FXML
-    void copyrightM() throws URISyntaxException, IOException {
+    public void copyrightM() throws URISyntaxException, IOException {
         if (Desktop.isDesktopSupported())
             Desktop.getDesktop().browse(new URI("https://github.com/RocketMaDev/DeskSorting"));
     }
 
-    @FXML
-    void impM() {
+    public void impM() {
         lockMainWindow();
         iodS.setTitle("导入");
         Label il = (Label) iod.lookup("#iLal");
@@ -213,13 +206,13 @@ public class MainController implements Controller {
     /**
      * @see MainController#importTable(BufferedInputStream)
      */
-    public void impl_importTable(BufferedInputStream in) throws IOException, IllegalAccessException {
+    public void impl_importTable(BufferedInputStream in) throws IOException {
         if (saved != null) {
             SimpleAlert alert = new SimpleAlert(Vars.GIVE_UP_LAYOUT_WARNING, false, this);
             alert.setEventHandler(event -> {
                 try {
                     importTable(in);
-                } catch (IllegalAccessException | IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
                 unlockMainWindow();
@@ -235,8 +228,7 @@ public class MainController implements Controller {
         }
     }
 
-    @FXML
-    void expM() {
+    public void expM() {
         lockMainWindow();
         iodS.setTitle("导出");
         Label il = (Label) iod.lookup("#iLal");
@@ -246,18 +238,15 @@ public class MainController implements Controller {
 
     private void randomSort() {
         LinkedList<Student> stus = new LinkedList<>(Vars.stuInfo);
-        int[] t0 = new GridIterator<>(IterType.FULL_GRID).toArray(true);
-        Integer[] t1 = new Integer[t0.length];
-        for (int i = 0; i < t0.length; i++)
-            t1[i] = t0[i];
-        LinkedList<Integer> seats = new LinkedList<>(Arrays.asList(t1));
+        LinkedList<Integer> seats = Arrays.stream(GridIterator.FULL_GRID.toArray(true)).boxed()
+                .collect(Collectors.toCollection(LinkedList::new));
         students = new Student[7][8];
         int length = stus.size();
         for (int i = 0; i < length; i++) {
             int pstu = (int) (Math.random() * (length - i));
             int pseat = (int) (Math.random() * seats.size());
             int xy = seats.get(pseat);
-            students[xy % 10][xy / 10] = stus.get(pstu);
+            students[readX(xy)][readY(xy)] = stus.get(pstu);
             stus.remove(pstu);
             seats.remove(pseat);
         }
@@ -265,8 +254,7 @@ public class MainController implements Controller {
         updateTable();
     }
 
-    @FXML
-    void randM() {
+    public void randM() {
         if (saved == null)
             randomSort();
         else {
@@ -284,8 +272,7 @@ public class MainController implements Controller {
         }
     }
 
-    @FXML
-    void fastSortM() {
+    public void fastSortM() {
         if (saved == null)
             return;
         Student[][] shadow = new Student[7][10];
@@ -314,10 +301,9 @@ public class MainController implements Controller {
      * Import the seat table through the given file.
      *
      * @param in pointing at the file, which ends with ".xlsx" and contains a seat table
-     * @throws IllegalAccessException if there is wrong with stuInfo
-     * @throws IOException            if the file can't be read.
+     * @throws IOException if the file can't be read.
      */
-    private void importTable(BufferedInputStream in) throws IllegalAccessException, IOException {
+    private void importTable(BufferedInputStream in) throws IOException {
         students = new Student[7][8];
         StudentList<Student> stuInfo = Vars.stuInfo;
         stuInfo.startSearching();
@@ -327,9 +313,12 @@ public class MainController implements Controller {
         try {
             opcPackage = OPCPackage.open(in);
             ctWorkbook = new XSSFWorkbook(opcPackage);
-        } catch (InvalidFormatException | IOException e) {
-            e.printStackTrace();
+        } catch (OLE2NotOfficeXmlFileException | EmptyFileException | InvalidFormatException e) {
             stuInfo.endSearching();
+            throw new IOException(e);
+        } catch (IOException e) {
+            stuInfo.endSearching();
+            throw e;
         }
         XSSFSheet table = Objects.requireNonNull(ctWorkbook).getSheetAt(0);
         int[] chairColumns = {0, 2, 3, 5, 6, 8, 9, 11};
@@ -363,15 +352,19 @@ public class MainController implements Controller {
      * Export the present table through the given BufferedOutputStream
      *
      * @param out the BufferedOutputStream to be written
-     * @throws IOException            if <code>out</code> can not be written
-     * @throws InvalidFormatException NEVER HAPPENS unless you delete <code>table.xlsx</code>
+     * @throws IOException if <code>out</code> can not be written
      */
-    public void exportTable(BufferedOutputStream out) throws IOException, InvalidFormatException {
+    public void exportTable(BufferedOutputStream out) throws IOException {
         if (saved == null)
             return;
         InputStream in = MainController.class.getResourceAsStream(LocalURL.TABLE_TEMPLATE_P);
         assert in != null;
-        OPCPackage pkg = OPCPackage.open(in);
+        OPCPackage pkg;
+        try {
+            pkg = OPCPackage.open(in);
+        } catch (InvalidFormatException e) {
+            throw new RuntimeException(e);
+        }
         XSSFWorkbook wb = new XSSFWorkbook(pkg);
         int[] chairColumns = {0, 2, 3, 5, 6, 8, 9, 11};
         XSSFSheet table = wb.getSheetAt(0);
@@ -512,8 +505,7 @@ public class MainController implements Controller {
             updateTable(p.x(), p.y());
     }
 
-    @FXML
-    void quickSwapM(ActionEvent actionEvent) {
+    public void quickSwapM(ActionEvent actionEvent) {
         index = -1;
         updateTable();
     }

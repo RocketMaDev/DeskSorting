@@ -39,11 +39,17 @@ public class SimpleAlert implements Alert {
         ok.setTextFill(Paint.valueOf("dodgerblue"));
         AnchorPane.setBottomAnchor(ok, GAP);
         AnchorPane.setRightAnchor(ok, GAP);
+        ok.setOnAction(event -> {
+            ctrler.unlockWindow();
+            alertStage.close();
+        });
 
         cancel = new JFXButton("取消");
         cancel.setFont(Font.font(FONT_SIZE));
         cancel.setTextFill(Paint.valueOf("dodgerblue"));
         AnchorPane.setBottomAnchor(cancel, GAP);
+        if (!enableCancel)
+            cancel.setVisible(false);
 
         text = new Label(message);
         text.setFont(Font.font(FONT_SIZE));
@@ -64,10 +70,18 @@ public class SimpleAlert implements Alert {
     }
 
     public void setEventHandler(EventHandler<ActionEvent> okHandler, EventHandler<ActionEvent> cancelHandler) {
-        ok.setOnAction(okHandler);
-        cancel.setOnAction(cancelHandler);
+        if (cancelHandler == null)
+            cancel.setOnAction(event -> {
+                ctrler.unlockWindow();
+                alertStage.close();
+            });
+        else
+            cancel.setOnAction(cancelHandler);
+        if (okHandler != null)
+            ok.setOnAction(okHandler);
     }
 
+    @Override
     public void show() {
         alertStage.show();
         AnchorPane.setRightAnchor(cancel, GAP + ok.getWidth() + GAP);
@@ -75,6 +89,7 @@ public class SimpleAlert implements Alert {
         alertStage.sizeToScene();
     }
 
+    @Override
     public void close() {
         alertStage.close();
     }

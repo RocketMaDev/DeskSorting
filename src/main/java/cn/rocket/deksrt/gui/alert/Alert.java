@@ -5,4 +5,7 @@
 package cn.rocket.deksrt.gui.alert;
 
 public interface Alert {
+    void show();
+
+    void close();
 }
