@@ -10,8 +10,11 @@ import java.util.Iterator;
 import static cn.rocket.deksrt.core.Util.store;
 
 /**
+ * 学生网格迭代器
+ *
  * @author Rocket
- * @version 0.9-pre
+ * @version 1.0.8
+ * @since 0.9-pre
  */
 public class GridIterator<T extends Pair> implements Iterable<T> {
     private final Pair[] cached;

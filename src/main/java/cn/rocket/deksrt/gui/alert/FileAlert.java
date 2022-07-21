@@ -30,8 +30,11 @@ import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 
 /**
+ * 选择文件对话框
+ *
  * @author Rocket
- * @version 0.9-pre
+ * @version 1.0.8
+ * @since 0.9-pre
  */
 public class FileAlert implements Alert, Controller {
     private static final double GAP = 25;

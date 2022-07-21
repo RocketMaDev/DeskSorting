@@ -11,8 +11,11 @@ import javafx.stage.Stage;
 import java.util.HashMap;
 
 /**
+ * 存放全局变量的类
+ *
  * @author Rocket
- * @version 0.9-pre
+ * @version 1.0.8
+ * @since 0.9-pre
  */
 public class Vars {
     /**

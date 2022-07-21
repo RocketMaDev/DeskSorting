@@ -11,6 +11,13 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
+/**
+ * 程序启动主类
+ *
+ * @author Rocket
+ * @version 1.0.8
+ * @since 0.9-pre
+ */
 public class Main {
     /**
      * The main entrance of the program.

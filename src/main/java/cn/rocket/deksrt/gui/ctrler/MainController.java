@@ -16,7 +16,6 @@ import cn.rocket.deksrt.gui.alert.SimpleAlert;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -50,8 +49,11 @@ import java.util.stream.Collectors;
 import static cn.rocket.deksrt.core.Util.*;
 
 /**
+ * 主窗口控制器
+ *
  * @author Rocket
- * @version 0.9-pre
+ * @version 1.0.8
+ * @since 0.9-pre
  */
 public class MainController implements Controller {
     private MainController(boolean empty) {
@@ -505,7 +507,7 @@ public class MainController implements Controller {
             updateTable(p.x(), p.y());
     }
 
-    public void quickSwapM(ActionEvent actionEvent) {
+    public void quickSwapM() {
         index = -1;
         updateTable();
     }

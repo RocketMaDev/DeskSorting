@@ -9,7 +9,7 @@
     <groupId>io.github.rocketmadev</groupId>
     <artifactId>DeskSorting</artifactId>
     <!--记得修改关于界面的版本信息-->
-    <version>0.9.8-SNAPSHOT</version>
+    <version>1.0.8-SNAPSHOT</version>
     <inceptionYear>2020</inceptionYear>
     <url>https://github.com/RocketMaDev/DeskSorting</url>
     <description>A program aiming at helping sort students' desks</description>

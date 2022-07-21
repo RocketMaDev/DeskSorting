@@ -6,7 +6,8 @@ package cn.rocket.deksrt.exceptions;
 
 /**
  * @author Rocket
- * @version 0.9-pre
+ * @version 1.0.8
+ * @since 0.9-pre
  */
 public class StuInfoException extends Exception {
     public StuInfoException() {

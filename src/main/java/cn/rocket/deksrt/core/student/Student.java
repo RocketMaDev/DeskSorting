@@ -8,10 +8,12 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
- * 不可修改的对象
+ * 学生信息类
+ * NOTE: 不可修改的对象
  *
  * @author Rocket
- * @version 0.9-pre
+ * @version 1.0.8
+ * @since 0.9-pre
  */
 public class Student {
     private final String name;

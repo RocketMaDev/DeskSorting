@@ -10,8 +10,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.util.Map;
 
 /**
+ * 全局工具类
+ *
  * @author Rocket
- * @version 1.0
+ * @version 1.0.8
+ * @since 0.9-pre
  */
 public class Util {
     public enum FontProperty {
@@ -88,7 +91,7 @@ public class Util {
     /**
      * To validate a string if it consists of only pinyin.
      *
-     * @param pinyin the string to be validate
+     * @param pinyin the string to be validated
      * @return <code>true</code> if the string consists of only pinyin
      */
     public static boolean validatePinyin(String pinyin) {

@@ -7,10 +7,13 @@ package cn.rocket.deksrt.core.student;
 import java.util.ArrayList;
 
 /**
+ * 存放学生对象的列表
+ *
  * @param <E> see <code>E</code> in <code>ArrayList</code>
  * @author Rocket
- * @version 0.9-pre
+ * @version 1.0.8
  * @see ArrayList
+ * @since 0.9-pre
  */
 public class StudentList<E extends Student> extends ArrayList<E> {
     private boolean searching = false;

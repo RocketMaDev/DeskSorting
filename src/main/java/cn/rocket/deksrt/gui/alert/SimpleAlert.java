@@ -19,8 +19,11 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
+ * 文字对话框
+ *
  * @author Rocket
- * @version 0.9-pre
+ * @version 1.0.8
+ * @since 0.9-pre
  */
 public class SimpleAlert implements Alert {
     private final Stage alertStage = new Stage(StageStyle.UNDECORATED);

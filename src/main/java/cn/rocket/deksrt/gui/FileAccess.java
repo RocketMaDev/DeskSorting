@@ -21,6 +21,13 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+/**
+ * 访问配置文件、表格文件的类
+ *
+ * @author Rocket
+ * @version 1.0.8
+ * @since 1.0.8
+ */
 public class FileAccess {
 
     /**
@@ -123,6 +130,7 @@ public class FileAccess {
     }
 
     //TODO StringJoiner(还有输入/出名单)
+
     /**
      * @return <code>false</code> if no info in "student.info" or the file doesn't exist.
      */

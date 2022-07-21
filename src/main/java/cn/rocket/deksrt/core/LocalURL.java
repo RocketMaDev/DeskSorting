@@ -9,6 +9,13 @@ import cn.rocket.deksrt.cli.Main;
 import java.io.File;
 import java.net.URISyntaxException;
 
+/**
+ * 存放各类静态链接
+ *
+ * @author Rocket
+ * @version 1.0.8
+ * @since 1.0.8
+ */
 public final class LocalURL {
     private LocalURL() {
     }

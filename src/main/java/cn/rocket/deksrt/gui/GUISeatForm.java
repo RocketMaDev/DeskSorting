@@ -9,6 +9,13 @@ import cn.rocket.deksrt.core.student.Student;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 
+/**
+ * GUI座位表实现
+ *
+ * @author Rocket
+ * @version 1.0.8
+ * @since 1.0.8
+ */
 public class GUISeatForm implements SeatForm {
 
     private JFXButton[][] btns;

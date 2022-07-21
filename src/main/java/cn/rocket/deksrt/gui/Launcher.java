@@ -25,8 +25,11 @@ import javafx.stage.StageStyle;
 import java.net.URL;
 
 /**
+ * GUI启动类
+ *
  * @author Rocket
- * @version 1.0
+ * @version 1.0.8
+ * @since 0.9-pre
  */
 public class Launcher extends Application {
     public static void launchSelf() {
