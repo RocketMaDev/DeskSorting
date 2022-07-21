@@ -20,6 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.StringJoiner;
 
 /**
  * 访问配置文件、表格文件的类
@@ -112,17 +113,15 @@ public class FileAccess {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("default:");
+        StringJoiner line = new StringJoiner("\n");
         for (Student student : Vars.stuInfo) {
-            sb.append(student.getName()).append("$").append(student.getPinyin()).append("$")
-                    .append(Boolean.valueOf(student.isBoarding())).append(",");
+            StringJoiner unit = new StringJoiner("$");
+            line.merge(unit.add(student.getName())
+                    .add(student.getPinyin())
+                    .add(student.isBoarding() ? "t" : "f"));
         }
-        sb.deleteCharAt(sb.length() - 1).append(';');
-        sb.deleteCharAt(sb.length() - 1);
-        try (OutputStreamWriter osw = new OutputStreamWriter(Files.newOutputStream(infoFile.toPath()), StandardCharsets.UTF_8)) {
-            osw.write(sb.toString());
+        try (OutputStreamWriter osw = new OutputStreamWriter(Files.newOutputStream(infoFile.toPath()), StandardCharsets.UTF_8)) {//TODO infoFile
+            osw.write(line.toString());
             osw.flush();
         } catch (IOException e) {
             e.printStackTrace();
