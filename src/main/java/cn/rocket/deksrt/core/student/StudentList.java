@@ -4,7 +4,10 @@
 
 package cn.rocket.deksrt.core.student;
 
+import org.apache.commons.math3.util.Pair;
+
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * 存放学生对象的列表
@@ -16,48 +19,68 @@ import java.util.ArrayList;
  * @since 0.9-pre
  */
 public class StudentList<E extends Student> extends ArrayList<E> {
+    private String className;
     private boolean searching = false;
-    private boolean[] hasSearched;
+    private boolean[] hasSearched = new boolean[size()];
+    private int duplicated;
 
     @Override
     public boolean add(E e) {
-        if (e == null)
-            throw new NullPointerException("e can't be null!");
+        Objects.requireNonNull(e, "e can't be null");
         if (!super.contains(e))
             return super.add(e);
         return false;
     }
 
-    public StudentList(int initialCapacity) {
+    public StudentList(int initialCapacity, String className) {
         super(initialCapacity);
+        this.className = className;
     }
 
+    /**
+     * 开始搜索
+     */
     public void startSearching() {
         if (searching)
             throw new IllegalStateException("Have started searching");
         searching = true;
-        hasSearched = new boolean[size()];
+        for (int i = 0; i < size(); i++)
+            hasSearched[i] = false;
+        duplicated = 0;
     }
 
-    public void endSearching() {
+    /**
+     * 结束搜索过程
+     *
+     * @return 左值：统计到的有效学生数；右值：统计到的重复次数
+     */
+    public Pair<Integer, Integer> endSearching() {
         if (!searching)
             throw new IllegalStateException("Have ended searching");
         searching = false;
-        hasSearched = null;
+        int cnt = 0;
+        for (int i = 0; i < size(); i++)
+            if (hasSearched[i])
+                cnt++;
+        return Pair.create(cnt, duplicated);
     }
 
     public Student searchByName(String name) {
         if (!searching)
             throw new IllegalStateException("You need to invoke startSearching() first");
-        for (int i = 0; i < size(); i++) {
+        for (int i = 0; i < size(); i++)
             if (get(i).getName().equals(name))
-                if (hasSearched[i])
+                if (hasSearched[i]) {
+                    duplicated++;
                     return null;
-                else {
+                } else {
                     hasSearched[i] = true;
                     return get(i);
                 }
-        }
         return null;
+    }
+
+    public String getClassName() {
+        return className;
     }
 }

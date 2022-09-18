@@ -21,6 +21,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 /**
  * 访问配置文件、表格文件的类
@@ -100,32 +101,30 @@ public class FileAccess {
         return errors.length() != 0 ? errors.deleteCharAt(errors.length() - 1).toString() : "";
     }
 
-    public static void exportStuInfo() {
-        File parent = new File(LocalURL.WORK_PATH);
-        if (!parent.exists())
-            //noinspection ResultOfMethodCallIgnored
-            parent.mkdirs();
-        File infoFile = new File(LocalURL.STU_INFO);
-        if (!infoFile.exists())
+    public static boolean exportStuInfo(StudentList<Student> list) {
+        File working = new File(LocalURL.WORK_PATH + list.getClassName() + ".sin");
+        if (!working.exists())
             try {
-                //noinspection ResultOfMethodCallIgnored
-                infoFile.createNewFile();
+                if (!working.createNewFile())
+                    return false;
             } catch (IOException e) {
-                e.printStackTrace();
+                return false;
             }
         StringJoiner line = new StringJoiner("\n");
-        for (Student student : Vars.stuInfo) {
+        for (Student student : list) {
             StringJoiner unit = new StringJoiner("$");
             line.merge(unit.add(student.getName())
                     .add(student.getPinyin())
                     .add(student.isBoarding() ? "t" : "f"));
         }
-        try (OutputStreamWriter osw = new OutputStreamWriter(Files.newOutputStream(infoFile.toPath()), StandardCharsets.UTF_8)) {//TODO infoFile
+        try (OutputStreamWriter osw = new OutputStreamWriter(Files.newOutputStream(working.getCanonicalFile().toPath()),
+                StandardCharsets.UTF_8)) {
             osw.write(line.toString());
             osw.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     //TODO StringJoiner(还有输入/出名单)
@@ -133,32 +132,20 @@ public class FileAccess {
     /**
      * @return <code>false</code> if no info in "student.info" or the file doesn't exist.
      */
-    public static boolean importStuInfo() {
-        File infoFile = new File(LocalURL.STU_INFO);
-        String info = null;
-        if (!infoFile.exists())
+    public static boolean importStuInfo(StudentList<Student> list) {
+        File working = new File(LocalURL.WORK_PATH + list.getClassName() + ".sin");
+        if (!working.exists())
             return false;
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
-                        Files.newInputStream(infoFile.toPath()), StandardCharsets.UTF_8))) {
-            info = reader.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (info == null)
-            return false;
-//        HashMap<String, StudentList<Student>> classMap = new HashMap<>();
-        String[] classes = new String[]{info}/*.split(";")*/;
-        for (String cla : classes) {
-            String[] detailedInfo = cla.split(":");
-            String[] studentArray = detailedInfo[1].split(",");
-            StudentList<Student> studentInfo = new StudentList<>(studentArray.length);
-            for (String student : studentArray) {
-                String[] basicInfo = student.split("\\$");
-                studentInfo.add(new Student(basicInfo[0], basicInfo[1], Boolean.parseBoolean(basicInfo[2])));
+                        Files.newInputStream(working.getCanonicalFile().toPath()), StandardCharsets.UTF_8))) {
+            list.clear();
+            for (String line : reader.lines().collect(Collectors.toList())) {
+                String[] infos = line.split("\\$");
+                list.add(new Student(infos[0], infos[1], infos[2].isEmpty()));
             }
-            Vars.stuInfo = studentInfo;
-//            classMap.put(detailedInfo[0],studentInfo);
+        } catch (IOException e) {
+            return false;//TODO Logger
         }
         return true;
     }

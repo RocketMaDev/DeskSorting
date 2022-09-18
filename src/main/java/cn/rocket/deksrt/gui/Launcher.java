@@ -49,7 +49,7 @@ public class Launcher extends Application {
                 System.out.println("errors:" + errors);
         }
         FileAccess.exportStuInfo();
-        URL fxml = getClass().getResource(LocalURL.MAIN_WINDOW_FXML);
+        URL fxml = getClass().getResource(LocalURL.MAIN_FXML);
         assert fxml != null; //TODO 记得优化
         Parent root = FXMLLoader.load(fxml);
         primaryStage.setTitle("排座位");

@@ -30,9 +30,14 @@ public final class LocalURL {
     public static final String JAR_PARENT_PATH; // with /
 
     public static final String RES_PATH = "/assets/deksrt/";
+    public static final String FXML_PATH = RES_PATH + "fxml/";
+    public static final String ICON_PATH = RES_PATH + "icon/";
+
+    public static final String MAIN_FXML = FXML_PATH + "Main.fxml";
+    public static final String WELCOME_FXML = FXML_PATH + "Welcome.fxml";
+    public static final String COPYRIGHT_FXML = FXML_PATH + "Copyright.fxml";
     public static final String STU_INFO_TEMPLATE_P = RES_PATH + "stuInfo.xlsx";
     public static final String TABLE_TEMPLATE_P = RES_PATH + "table.xlsx";
-    public static final String MAIN_WINDOW_FXML = RES_PATH + "MainWindow.fxml";
     public static final String FOLDER_ICON = RES_PATH + "folder.png";
     public static final String INTRO = RES_PATH + "intro.png";
 
